@@ -46,12 +46,12 @@ Repository for the base code and design of the Qutee V2 robot
     ```
     Install ROS2
     ```shell
-    sudo apt install ros-iron-desktop
+    sudo apt install ros-humble-desktop
     ```
 
 - Step 4 - Setup Environment
     ```shell
-    source /opt/ros/iron/setup.bash
+    source /opt/ros/humble/setup.bash
     ```
 
 - Step 5 - Test
