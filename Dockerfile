@@ -1,35 +1,26 @@
-# Use an appropriate base image, such as Ubuntu
 FROM ubuntu:latest
 
-# Install necessary packages for APT
+# Set environment variables
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install necessary packages for ROS 2
 RUN apt-get update && apt-get install -y \
     curl \
     gnupg2 \
     lsb-release \
     && rm -rf /var/lib/apt/lists/*
 
+# Add ROS 2 repository and install ROS 2 packages
+RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add - \
+    && sh -c 'echo "deb [arch=$(dpkg --print-architecture)] http://packages.ros.org/ros2/ubuntu $(lsb_release -cs) main" > /etc/apt/sources.list.d/ros2-latest.list' \
+    && apt-get update && apt-get install -y \
+    ros-humble-desktop \
+    && rm -rf /var/lib/apt/lists/*
 
+# Source ROS 2 setup script
+RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
 
-RUN locale \
-    apt update\
-    apt install locales \
-    locale-gen en_US en_US.UTF-8\
-    update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8\
-    export LANG=en_US.UTF-8\
-    locale
+# Optional: Install additional ROS 2 packages or dependencies
 
-RUN apt install software-properties-common\
-    add-apt-repository universe \
-    apt update && apt install curl -y \
-    curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
-
-RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
-
-RUN apt update \
-    apt upgrade
-
-RUN apt install ros-humble-desktop
-
-RUN source /opt/ros/humble/setup.bash
-
-RUN ros2 wtf
+# Set entrypoint
+CMD ["bash"]
