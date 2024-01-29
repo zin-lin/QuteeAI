@@ -64,7 +64,7 @@ Repository for the base code and design of the Qutee V2 robot
 - Step 1
   - In your Linux/Ubuntu VM/Ubuntu App/WSL Powershell, generate SSH key, please keep it out of the repo dir
   ```shell
-  ssh key-gen
+  ssh keygen
   ```
 
 - Step 2
