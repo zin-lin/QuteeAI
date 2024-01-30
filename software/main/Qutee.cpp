@@ -285,9 +285,9 @@ void Qutee::send_actions(const Actions_t& actions){
   
   // Build a SyncWrite Packet and transmit to DYNAMIXEL  
   if(this->_dxl.syncWrite(&this->_sw_infos) == true){
-    //ESP_LOGI("Control Loop","[SyncWrite] Success");
+    ESP_LOGI("Control Loop","[SyncWrite] Success");
   } else {
-    //ESP_LOGE("Control Loop","[SyncWrite] Fail, Lib error code: %i ",this->_dxl.getLastLibErrCode()); // TODO fix this error
+    ESP_LOGE("Control Loop","[SyncWrite] Fail, Lib error code: %i ",this->_dxl.getLastLibErrCode()); // TODO fix this error
   }
 
 }
@@ -299,13 +299,15 @@ void Qutee::get_motor_positions(State_t& state_ref, size_t offset)
   uint8_t i, recv_cnt;
   recv_cnt = this->_dxl.syncRead(&this->_sr_infos);
   if(recv_cnt > 0) {
-    //ESP_LOGI("Control Loop","[SyncRead] Success, Received ID Count: %i ",recv_cnt);
+    ESP_LOGI("Control Loop","[SyncRead] Success, Received ID Count: %i ",recv_cnt);
     for(i = 0; i<recv_cnt; i++){
       state_ref(i+offset,0)= (this->_sr_data[i].present_position-2048.0f)/256.0f;
-      //ESP_LOGI("Control Loop","  ID: %i, \t Present Position: %i",this->_sr_infos.p_xels[i].id), this->_sr_data[i].present_position);
+
+
+      ESP_LOGI("Control Loop","  ID: %i, \t Present Position: %i",this->_sr_infos.p_xels[i].id), this->_sr_data[i].present_position);
     }
   }else{
-    //ESP_LOGE("Control Loop"," [SyncRead] Fail, Lib error code: %i ",this->_dxl.getLastLibErrCode()); // TODO fix this error
+    ESP_LOGE("Control Loop"," [SyncRead] Fail, Lib error code: %i ",this->_dxl.getLastLibErrCode()); // TODO fix this error
   }
 
 }

@@ -326,7 +326,7 @@ void micro_ros_task(void * arg)
 	}
 
 	// Free resources
-    //TODO IF YOU NEED TO, Here Qutee is killed when not in use. 
+    //TODO IF YOU NEED TO, Here Qutee is killed when not in use. (Priority less)
 }
 
 
