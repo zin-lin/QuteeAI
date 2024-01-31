@@ -6,6 +6,11 @@
 
 def print_hi(name):
     # Use a breakpoint in the code line below to debug your script.
+    msg = '''
+    1. esp32s3 is changed to esp32 in 2 places -defaults and auto file
+    2. esp_ipc and esp_hid are removed from arduino esp32 CMakeList's priv -req 
+    3. arduino is removed from busIO CMakeList REQUIRES arduino
+    '''
     print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
 
 
