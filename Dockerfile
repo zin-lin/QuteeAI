@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y \
 RUN git clone https://github.com/ROBOTIS-GIT/DynamixelSDK.git /opt/DynamixelSDK
 
 # Build Dynamixel SDK
-RUN cd /opt/DynamixelSDK/python && python3 setup.py
+RUN cd /opt/DynamixelSDK/python && python3 setup.py install
 
 # Install dependencies for Dynamixel SDK Python
 #
