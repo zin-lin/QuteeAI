@@ -18,8 +18,8 @@ RUN cd /opt/DynamixelSDK/python && python3 setup.py install
 
 # Install dependencies for Dynamixel SDK Python
 #
-
-RUN ros2 wtf
+# Define the command to run when the container starts
+CMD ["bash", "-c", "source /opt/ros/foxy/setup.bash && bash"]
 
 ## Set up Python environment
 
