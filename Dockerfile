@@ -17,11 +17,11 @@ RUN cd /opt/DynamixelSDK/c++ && mkdir build && cd build && cmake .. && make
 # Install dependencies for Dynamixel SDK Python
 RUN pip install pyserial
 
-# Set up Python environment
-WORKDIR /app
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copy Dynamixel Python example file
-COPY example_python/protocol1.0/ping/ping.py .
+## Set up Python environment
+#WORKDIR /app
+#RUN pip install --no-cache-dir -r requirements.txt
+#
+## Copy Dynamixel Python example file
+#COPY example_python/protocol1.0/ping/ping.py .
 
 CMD ["python", "ping.py"]
