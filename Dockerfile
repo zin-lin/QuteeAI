@@ -22,5 +22,15 @@ RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
 
 # Optional: Install additional ROS 2 packages or dependencies
 
+
+# Clone Dynamixel SDK repository
+RUN git clone https://github.com/ROBOTIS-GIT/DynamixelSDK.git /opt/DynamixelSDK
+
+# Build Dynamixel SDK
+RUN cd /opt/DynamixelSDK/c++ && mkdir build && cd build && cmake .. && make
+
+# Install dependencies for Dynamixel SDK Python
+RUN pip install pyserial
+
 # Set entrypoint
 CMD ["bash"]
