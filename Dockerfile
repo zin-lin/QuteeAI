@@ -3,6 +3,7 @@ FROM ros:foxy
 # Install dependencies
 RUN apt-get update && apt-get install -y \
     git \
+    pip \
     cmake \
     build-essential \
     libusb-1.0-0-dev \
@@ -18,10 +19,9 @@ RUN cd /opt/DynamixelSDK/c++ && cd build/linux64 && make
 #
 
 ## Set up Python environment
-#WORKDIR /app
-#RUN pip install --no-cache-dir -r requirements.txt
-#
-## Copy Dynamixel Python example file
-#COPY example_python/protocol1.0/ping/ping.py .
+WORKDIR /app
+
+# Copy Dynamixel Python example file
+COPY example_python/protocol1.0/ping/ping.py .
 
 CMD ["python", "ping.py"]
