@@ -15,7 +15,7 @@ RUN git clone https://github.com/ROBOTIS-GIT/DynamixelSDK.git /opt/DynamixelSDK
 RUN cd /opt/DynamixelSDK/c++ && cd build/linux64 && make
 
 # Install dependencies for Dynamixel SDK Python
-RUN pip install pyserial
+#
 
 ## Set up Python environment
 #WORKDIR /app
