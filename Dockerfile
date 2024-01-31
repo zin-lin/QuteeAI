@@ -9,7 +9,8 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     libusb-1.0-0-dev \
     python3 \
-    python3-colcon-common-extensions
+    python3-colcon-common-extensions \
+    nano
 
 # Clone Dynamixel SDK repository
 RUN git clone https://github.com/ROBOTIS-GIT/DynamixelSDK.git /opt/DynamixelSDK
