@@ -8,6 +8,10 @@ RUN apt-get update && apt-get install -y \
     curl \
     gnupg2 \
     lsb-release \
+    git \
+    cmake \
+    build-essential \
+    libusb-1.0-0-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Add ROS 2 repository and install ROS 2 packages
