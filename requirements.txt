@@ -1,0 +1,4 @@
+adafruit-circuitpython-busdevice
+adafruit-circuitpython-mpu9250
+adafruit-circuitpython-register
+rclpy
