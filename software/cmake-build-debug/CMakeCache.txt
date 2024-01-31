@@ -20,9 +20,8 @@ CMAKE_ADDR2LINE:FILEPATH=C:/Program Files/JetBrains/CLion 2023.2.2/bin/mingw/bin
 //Path to a program.
 CMAKE_AR:FILEPATH=C:/Program Files/JetBrains/CLion 2023.2.2/bin/mingw/bin/ar.exe
 
-//Choose the type of build, options are: None Debug Release RelWithDebInfo
-// MinSizeRel ...
-CMAKE_BUILD_TYPE:STRING=Debug
+//No help, variable specified on the command line.
+CMAKE_BUILD_TYPE:UNINITIALIZED=Debug
 
 //Id string of the compiler for the CodeBlocks IDE. Automatically
 // detected when left empty

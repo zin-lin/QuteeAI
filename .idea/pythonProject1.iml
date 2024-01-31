@@ -36,7 +36,10 @@
       <excludeFolder url="file://$MODULE_DIR$/software/cmake-build-debug" />
       <excludeFolder url="file://$MODULE_DIR$/venv" />
       <excludeFolder url="file://$MODULE_DIR$/CMakeFiles" />
+      <excludeFolder url="file://$MODULE_DIR$/CMakeFiles" />
       <excludeFolder url="file://$MODULE_DIR$/software/CMakeFiles" />
+      <excludeFolder url="file://$MODULE_DIR$/software/CMakeFiles" />
+      <excludeFolder url="file://$MODULE_DIR$/software/cmake-build-debug" />
       <excludeFolder url="file://$MODULE_DIR$/software/cmake-build-debug" />
     </content>
     <orderEntry type="inheritedJdk" />
