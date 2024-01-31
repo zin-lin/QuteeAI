@@ -112,6 +112,7 @@ idf_component_register(SRCS "main.cpp"
                              "micro_ros_espidf_component"
                              "Adafruit-GFX-Library"
                              "Adafruit_BusIO"
+                             "esp_ipc"
 
                     )
 set_target_properties(${COMPONENT_LIB} PROPERTIES COMPILE_FLAGS "-Wno-maybe-uninitialized -Wimplicit-function-declaration -fpermissive")
