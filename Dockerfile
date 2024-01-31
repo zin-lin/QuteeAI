@@ -25,7 +25,7 @@ RUN pip3 install dynamixel-sdk
 WORKDIR /app
 
 # Copy everything from the local "folder_to_copy" directory into the container's "/app" directory
-COPY pysoftware/* /app/
+COPY pysoftware/ /app/
 
 # Define the command to run when the container starts
 CMD ["bash", "-c", "source /opt/ros/humble/setup.bash && bash"]
