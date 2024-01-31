@@ -18,7 +18,7 @@ RUN git clone https://github.com/ROBOTIS-GIT/DynamixelSDK.git /opt/DynamixelSDK
 RUN cd /opt/DynamixelSDK/python && python3 setup.py install
 
 # Install dependencies for Dynamixel SDK
-RUN pip3 install dynamixelsdk
+RUN pip3 install dynamixel-sdk
 
 
 # Set the working directory inside the container
