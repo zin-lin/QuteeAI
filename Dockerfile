@@ -19,9 +19,4 @@ RUN cd /opt/DynamixelSDK/c++ && cd build/linux64 && make
 #
 
 ## Set up Python environment
-WORKDIR /app
 
-# Copy Dynamixel Python example file
-COPY example_python/protocol1.0/ping/ping.py .
-
-CMD ["python", "ping.py"]
