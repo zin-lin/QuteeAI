@@ -19,5 +19,7 @@ RUN cd /opt/DynamixelSDK/python && python3 setup.py install
 # Install dependencies for Dynamixel SDK Python
 #
 
+RUN ros2 wtf
+
 ## Set up Python environment
 
