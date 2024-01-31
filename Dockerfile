@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y \
 RUN git clone https://github.com/ROBOTIS-GIT/DynamixelSDK.git /opt/DynamixelSDK
 
 # Build Dynamixel SDK
-RUN cd /opt/DynamixelSDK/c++ && rm -rf build && mkdir build && cd build && make
+RUN cd /opt/DynamixelSDK/c++ && cd build && make
 
 # Install dependencies for Dynamixel SDK Python
 RUN pip install pyserial
