@@ -12,8 +12,7 @@ RUN apt-get update && apt-get install -y \
     python3-colcon-common-extensions \
     nano
 
-# Install dependencies for Dynamixel SDK
-RUN pip3 install -r requirements.txt
+
 # Clone Dynamixel SDK repository
 RUN git clone https://github.com/ROBOTIS-GIT/DynamixelSDK.git /opt/DynamixelSDK
 
@@ -26,6 +25,9 @@ WORKDIR /app
 
 # Copy everything from the local "folder_to_copy" directory into the container's "/app" directory
 COPY pysoftware/ /app/
+
+# Install dependencies for Dynamixel SDK
+RUN pip3 install -r requirements.txt
 
 # Define the command to run when the container starts
 CMD ["bash", "-c", "source /opt/ros/humble/setup.bash && bash"]
