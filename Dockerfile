@@ -12,14 +12,13 @@ RUN apt-get update && apt-get install -y \
     python3-colcon-common-extensions \
     nano
 
+# Install dependencies for Dynamixel SDK
+RUN pip3 install -r requirements.txt
 # Clone Dynamixel SDK repository
 RUN git clone https://github.com/ROBOTIS-GIT/DynamixelSDK.git /opt/DynamixelSDK
 
 # Build Dynamixel SDK
 RUN cd /opt/DynamixelSDK/python && python3 setup.py install
-
-# Install dependencies for Dynamixel SDK
-RUN pip3 install -r requirements.txt
 
 
 # Set the working directory inside the container
