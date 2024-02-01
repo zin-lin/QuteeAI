@@ -2,6 +2,41 @@
 Repository for the base code and design of the Qutee V2 robot
 
 
+# Environment Setup
+Setup your Linux environment and Docker.
+
+## Linux
+For Linux, you can choose WSL **OR** a VM
+
+### Window Subsystem for Linux ```(WSL)```
+Allows a linux distro to run directly on a Windows machine. The default distro will be ```Ubuntu```
+
+- Step 1 - WSL install command
+  - Open powershell or windows cmd in administrator mode
+  - Enter the command, then restart your machine 
+
+  ```powershell
+    wsl --install
+  ``` 
+*For more info: https://learn.microsoft.com/en-us/windows/wsl/install*
+### Virtual Machine ``(VM)``
+TBC
+
+
+## Docker
+- Step 1 - Install Docker Desktop
+  - Download docker desktop on Windows (https://www.docker.com/products/docker-desktop/)
+
+### ``WSL ONLY``
+- Step 2 - Modify Docker Settings
+  - Ensure "Use the WSL 2 based engine" is checked.
+  - Go to **Settings > Resources > WSL > Enable Integration**
+
+*For more info: https://learn.microsoft.com/en-us/windows/wsl/tutorials/wsl-containers*
+
+---
+
+
 # Installing `ROS2`
 
 - Step 1 - Set Locale
@@ -17,34 +52,34 @@ Repository for the base code and design of the Qutee V2 robot
     ```
 - Step 2 - Enable required respositories
 
-    Enable Ubuntu Universe repository
+    - Enable Ubuntu Universe repository
     ```shell
     sudo apt install software-properties-common
     sudo add-apt-repository universe
     ```
 
-    Add the ROS 2 GPG key with apt
+    - Add the ROS 2 GPG key with apt
     ```shell
     sudo apt update && sudo apt install curl -y
     sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
     ```
 
-    Add the repository to your sources list
+    - Add the repository to your sources list
     ```shell
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
     ```
 
 - Step 3 - Install ROS2
 
-    Update your apt repository caches after setting up the repositories.
+    - Update your apt repository caches after setting up the repositories.
     ```shell
     sudo apt update
     ```
-    Make sure system is up to date
+    - Make sure system is up to date
     ```shell
     sudo apt upgrade
     ```
-    Install ROS2
+    - Install ROS2
     ```shell
     sudo apt install ros-humble-desktop
     ```
@@ -58,8 +93,9 @@ Repository for the base code and design of the Qutee V2 robot
     ```shell
     ros2 wtf
     ```
-    Should say "All 5 Checks Passed"
+  -  Should say "All 5 Checks Passed"
 
+*For more info: https://docs.ros.org/en/iron/Installation/Ubuntu-Install-Debians.html*
 ## Getting Access to Repository on `Linux`
 - Step 1
   - In your Linux/Ubuntu VM/Ubuntu App/WSL Powershell, generate SSH key, please keep it out of the repo dir
