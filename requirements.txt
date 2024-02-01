@@ -1,0 +1,3 @@
+adafruit-circuitpython-busdevice
+Adafruit_BNO055
+adafruit-circuitpython-register
