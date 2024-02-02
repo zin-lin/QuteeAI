@@ -3,7 +3,7 @@
 Date: --/02/2023  
 Location: --
 
-Client: Simon Smith, C82e
+Client: Simón Smith, C82e
 Sponsor: Alex Gkanatsios, B69b
 
 Attendees:
