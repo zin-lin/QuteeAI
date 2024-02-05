@@ -3,5 +3,5 @@
   <component name="CMakeWorkspace" PROJECT_DIR="$PROJECT_DIR$/software">
     <contentRoot DIR="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.11 (qtai)" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.10.12 WSL (Ubuntu): (/opt/ros/humble/bin/python3)" project-jdk-type="Python SDK" />
 </project>

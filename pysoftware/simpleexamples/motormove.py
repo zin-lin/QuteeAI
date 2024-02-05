@@ -1,3 +1,4 @@
+# zin
 from dynamixel_sdk import *
 
 def move_mortor():
@@ -32,7 +33,11 @@ def move_mortor():
     DXL_ID = 1  # Modify this according to your motor ID
     DXL_GOAL_POSITION = 512  # Modify this according to your goal position
 
-    dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler, 10, 1000000, 576600)
+    # Enable Dynamixel torque
+    dxl.write1ByteTxRx(portHandler, DXL_ID, ADDR_PRO_TORQUE_ENABLE, TORQUE_ENABLE)
+
+    # Set goal position
+    dxl.write4ByteTxRx(portHandler, DXL_ID, ADDR_PRO_GOAL_POSITION, 120)
     if dxl_comm_result != COMM_SUCCESS:
         print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
     elif dxl_error != 0:

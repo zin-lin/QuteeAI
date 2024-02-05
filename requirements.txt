@@ -1,3 +1,5 @@
 adafruit-circuitpython-busdevice
 Adafruit_BNO055
 adafruit-circuitpython-register
+flask
+flask_cors
