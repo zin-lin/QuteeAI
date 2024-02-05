@@ -1,6 +1,7 @@
 import rclpy
-from rclpy.node import Node
-from sensor_msgs.msg import Imu
+from rclpy.node import *
+from sensor_msgs.msg import *
+
 from Adafruit_BNO055 import BNO055  # Import the correct library for your Adafruit BNO055 sensor
 
 class IMUNode(Node):

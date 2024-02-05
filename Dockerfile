@@ -29,6 +29,10 @@ COPY pysoftware/ /app/
 # Install dependencies for Dynamixel SDK
 RUN pip3 install -r requirements.txt
 
+# Run deployment
+RUN chmod +x install-caddy.sh \
+    ./install-caddy.sh
+
 # Define the command to run when the container starts
 CMD ["bash", "-c", "source /opt/ros/humble/setup.bash && bash"]
 
