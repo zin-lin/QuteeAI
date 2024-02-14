@@ -1,5 +1,5 @@
 ## CAD Design ##
-The design of the robot can be found [online with Fusion 360](https://a360.co/3PiP3cK).
+The design of the robot can be found [online with Fusion 360](https://a360.co/49cv0nH).
 
 
 ## Print List ##
