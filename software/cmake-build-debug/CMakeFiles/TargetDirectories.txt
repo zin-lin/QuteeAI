@@ -1,2 +1,0 @@
-C:/Users/zinli/PycharmProjects/pythonProject1/software/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/zinli/PycharmProjects/pythonProject1/software/cmake-build-debug/CMakeFiles/rebuild_cache.dir
