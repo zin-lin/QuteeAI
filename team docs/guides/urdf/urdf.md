@@ -325,7 +325,7 @@
 
 * Stop and reload rviz
   ```shell
-  CTRL+C <!-- stops rviz>
+  CTRL+C <!-- stops rviz -->
 
   <!-- relaunchs rviz, can also use up key -->
   ros2 launch urdf_tutorial display.launch.py model:=/path/to/urdf/file.urdf
