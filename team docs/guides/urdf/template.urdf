@@ -6,6 +6,7 @@
     <!-- first link to the world -->
     <link name="world_link"></link>
 
+    <!-- describes relationship between the world and base_link -->
     <joint name="base_joint" type="fixed">
         <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
         <parent link="world_link"/>
