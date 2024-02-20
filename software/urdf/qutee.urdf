@@ -1,0 +1,170 @@
+<?xml version="1.0"?>
+<robot name="qutee_robot">
+
+    <!-- 
+                positive / negative
+        x-axis: forwards / backwards 
+        y-axis: left    / right 
+        z-axis: up       / down
+        (from the robots point of view)
+
+        dimensions are in meters
+    -->
+
+    <material name="grey">
+        <color rgba="0.7 0.7 0.7 1"/>
+    </material>
+
+    <material name="green">
+        <color rgba="0 0.6 0 1"/>
+    </material>
+
+    <material name="white">
+        <color rgba="1 1 1 1"/>
+    </material>
+
+    <!-- <link name="world_link" />
+    
+    <joint name="world_base_footprint_joint" type="fixed">
+        <parent link="world_link"/>
+        <child link="base_footprint_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <link name="base_footprint_link" /> -->
+        
+    <!-- <joint name="base_joint" type="fixed">
+        <parent link="base_footprint_link"/>
+        <child link="base_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint> -->
+
+
+    <!-- represents the battery box as seen in the assembly stl (refer to fusion360) -->
+    <link name="base_link">
+        <visual>
+            <geometry>
+                <box size="0.035 0.034 0.03"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <material name="grey"/>
+        </visual>
+    </link>
+
+
+    <!-- body bottom ////////////////////////////////////////////////////////////////////////////////// -->
+    <joint name="body_bt_sq_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="body_bottom_sq_link"/>
+        <origin xyz="0 0 -0.0145" rpy="0 0 0"/>
+    </joint>
+
+    <!-- top of body bottom is 0.031 down from top of battery box -->
+    <!-- overall dimensions of bottom base is 0.114 x 0.114 x 0.002, but corners are constructed from cylinders -->
+    <link name="body_bottom_sq_link">
+
+        <!-- square center -->
+        <visual>
+            <geometry>
+                <box size="0.078 0.078 0.002"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0.7854"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- front corner -->
+        <visual>
+            <geometry>
+                <cylinder radius="0.014" length="0.002"/>
+            </geometry>
+            <origin xyz="0.043 0 0" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- rear corner -->
+        <visual>
+            <geometry>
+                <cylinder radius="0.014" length="0.002"/>
+            </geometry>
+            <origin xyz="-0.043 0 0" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- left corner -->
+        <visual>
+            <geometry>
+                <cylinder radius="0.014" length="0.002"/>
+            </geometry>
+            <origin xyz="0 0.043 0" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- right corner -->
+        <visual>
+            <geometry>
+                <cylinder radius="0.014" length="0.002"/>
+            </geometry>
+            <origin xyz="0 -0.043 0" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+    </link>
+
+
+    <!-- body base ////////////////////////////////////////////////////////////////////////////////// -->
+    <joint name="body_base_sq_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="body_base_sq_link"/>
+        <origin xyz="0 0 0.0115" rpy="0 0 0"/>
+    </joint>
+
+    <!-- bottom of body base is 0.028 up from bottom of battery box -->
+    <!-- overall dimensions of bottom base is 0.114 x 0.114 x 0.002, but corners are constructed from cylinders -->
+    <link name="body_base_sq_link">
+
+        <!-- square center -->
+        <visual>
+            <geometry>
+                <box size="0.078 0.078 0.002"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0.7854"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- front corner -->
+        <visual>
+            <geometry>
+                <cylinder radius="0.014" length="0.002"/>
+            </geometry>
+            <origin xyz="0.043 0 0" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- rear corner -->
+        <visual>
+            <geometry>
+                <cylinder radius="0.014" length="0.002"/>
+            </geometry>
+            <origin xyz="-0.043 0 0" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- left corner -->
+        <visual>
+            <geometry>
+                <cylinder radius="0.014" length="0.002"/>
+            </geometry>
+            <origin xyz="0 0.043 0" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- right corner -->
+        <visual>
+            <geometry>
+                <cylinder radius="0.014" length="0.002"/>
+            </geometry>
+            <origin xyz="0 -0.043 0" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+    </link>
+
+</robot>
