@@ -2,11 +2,14 @@
 <robot name="qutee_robot">
 
     <!-- 
-                positive / negative
-        x-axis: forwards / backwards 
-        y-axis: left    / right 
-        z-axis: up       / down
+        axes information-
+                        positive / negative
+        x-axis(red)  :  forwards / backwards 
+        y-axis(green):  left     / right 
+        z-axis(blue) :  up       / down
         (from the robots point of view)
+        colours are axes as seen in rviz
+
 
         dimensions are in meters
     -->
@@ -17,6 +20,10 @@
 
     <material name="green">
         <color rgba="0 0.6 0 1"/>
+    </material>
+
+    <material name="black">
+        <color rgba="0 0 0"/>
     </material>
 
     <material name="white">
@@ -167,4 +174,164 @@
         </visual>
     </link>
 
+
+    <!-- top case ////////////////////////////////////////////////////////////////////////////////// -->
+    <joint name="body_base_sq_top_case_joint" type="fixed">
+        <parent link="body_base_sq_link"/>
+        <child link="top_case_link"/>
+        <origin xyz="0 0 0.01055" rpy="0 0 0"/>
+    </joint>
+
+    <link name="top_case_link">
+        <!-- horizontal components -->
+        <visual>
+            <geometry>
+                <box size="0.0085 0.0544 0.0055"/>
+            </geometry>
+            <origin xyz="-0.0259 0 0.0091" rpy="0 0 0"/>
+            <material name="black"/>        
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0021 0.0544 0.002"/>
+            </geometry>
+            <origin xyz="-0.0024 0 0.01085" rpy="0 0 0"/>
+            <material name="black"/>        
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0336 0.0394 0.002"/>
+            </geometry>
+            <origin xyz="0.01335 0.0075 0.01085" rpy="0 0 0"/>
+            <material name="black"/>        
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0086 0.0544 0.0055"/>
+            </geometry>
+            <origin xyz="0.02585 0 0.0091" rpy="0 0 0"/>
+            <material name="black"/>        
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0603 0.0056 0.0055"/>
+            </geometry>
+            <origin xyz="0 0.0244 0.0091" rpy="0 0 0"/>
+            <material name="black"/>        
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0603 0.0055 0.0055"/>
+            </geometry>
+            <origin xyz="0 -0.02445 0.0091" rpy="0 0 0"/>
+            <material name="black"/>        
+        </visual>
+
+        <!-- corners -->
+        <visual>
+            <geometry>
+                <cylinder radius="0.0126" length="0.0237"/>
+            </geometry>
+            <origin xyz="0.0274 0.02445 0" rpy="0 0 0"/>
+            <material name="black"/>        
+        </visual>
+        <visual>
+            <geometry>
+                <cylinder radius="0.0126" length="0.0237"/>
+            </geometry>
+            <origin xyz="-0.0274 0.02445 0" rpy="0 0 0"/>
+            <material name="black"/>        
+        </visual>
+        <visual>
+            <geometry>
+                <cylinder radius="0.0126" length="0.0237"/>
+            </geometry>
+            <origin xyz="0.0274 -0.02445 0" rpy="0 0 0"/>
+            <material name="black"/>        
+        </visual>
+        <visual>
+            <geometry>
+                <cylinder radius="0.0126" length="0.0237"/>
+            </geometry>
+            <origin xyz="-0.0274 -0.02445 0" rpy="0 0 0"/>
+            <material name="black"/>        
+        </visual>
+    </link>
+
+
+    <!-- bottom case ////////////////////////////////////////////////////////////////////////////////// -->
+    <joint name="body_bottom_sq_bottom_case_joint" type="fixed">
+        <parent link="body_bottom_sq_link"/>
+        <child link="bottom_case_link"/>
+        <origin xyz="0 0 -0.0089" rpy="0 0 0"/>
+    </joint>
+
+    <link name="bottom_case_link">
+        <!-- horizontal components -->
+        <visual>
+            <geometry>
+                <box size="0.0630 0.057 0.0035"/>
+            </geometry>
+            <origin xyz="0 0 -0.0101" rpy="0 0 0"/>
+            <material name="black"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.003 0.057 0.0082"/>
+            </geometry>
+            <origin xyz="0.03 0 -0.00775" rpy="0 0 0"/>
+            <material name="black"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.003 0.057 0.0082"/>
+            </geometry>
+            <origin xyz="-0.03 0 -0.00775" rpy="0 0 0"/>
+            <material name="black"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0630 0.003 0.0082"/>
+            </geometry>
+            <origin xyz="0 0.027 -0.00775" rpy="0 0 0"/>
+            <material name="black"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0630 0.003 0.0082"/>
+            </geometry>
+            <origin xyz="0 -0.027 -0.00775" rpy="0 0 0"/>
+            <material name="black"/>
+        </visual>
+
+        <!-- corners -->
+        <visual>
+            <geometry>
+                <cylinder radius="0.0126" length="0.0237"/>
+            </geometry>
+            <origin xyz="0.0274 0.02445 0" rpy="0 0 0"/>
+            <material name="black"/>        
+        </visual>
+        <visual>
+            <geometry>
+                <cylinder radius="0.0126" length="0.0237"/>
+            </geometry>
+            <origin xyz="-0.0274 0.02445 0" rpy="0 0 0"/>
+            <material name="black"/>        
+        </visual>
+        <visual>
+            <geometry>
+                <cylinder radius="0.0126" length="0.0237"/>
+            </geometry>
+            <origin xyz="0.0274 -0.02445 0" rpy="0 0 0"/>
+            <material name="black"/>        
+        </visual>
+        <visual>
+            <geometry>
+                <cylinder radius="0.0126" length="0.0237"/>
+            </geometry>
+            <origin xyz="-0.0274 -0.02445 0" rpy="0 0 0"/>
+            <material name="black"/>        
+        </visual>
+    </link>
 </robot>
