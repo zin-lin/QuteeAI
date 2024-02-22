@@ -404,22 +404,64 @@
 
     <!-- doubleU connectors ////////////////////////////////////////////////////////////////////////////////// -->
     <!-- center of joint rotation is set to be center of the body_base (top base) vertically 
-         and center of the corner section as if centered around where the horn would be,
+         and center of the corner section horizontally as if centered around where the horn would be,
          the rest of the link is offset from there -->
     <joint name="front_motor_front_doubleu_joint" type="continuous">
         <parent link="front_motor_link"/>
         <child link="front_doubleu_link"/>
-        <origin xyz="0.0075 0 0.0115" rpy="0 0 0"/>
+        <origin xyz="0.0075 0 0.013" rpy="0 0 0"/>
         <axis xyz="0 0 1"/>
     </joint>
 
+    <!-- doubleu link is 0.0562 x 0.0334 x 0.0334 overall -->
     <link name="front_doubleu_link">
+        <!-- horizontal components -->
         <visual>
             <geometry>
                 <cylinder radius="0.01" length="0.0022"/>
             </geometry>
-            <origin xyz="0 0 0.0032" rpy="0 0 0"/>
+            <origin xyz="0 0 0.0026" rpy="0 0 0"/>
             <material name="green"/>    
         </visual>
+        <visual>
+            <geometry>
+                <box size="0.0181 0.02 0.0022"/>
+            </geometry>
+            <origin xyz="0.00905 0 0.0026" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <cylinder radius="0.01" length="0.0022"/>
+            </geometry>
+            <origin xyz="0 0 -0.0286" rpy="0 0 0"/>
+            <material name="green"/>    
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0181 0.02 0.0022"/>
+            </geometry>
+            <origin xyz="0.00905 0 -0.0286" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- central component -->
+        <visual>
+            <geometry>
+                <box size="0.0022 0.02 0.0334"/>
+            </geometry>
+            <origin xyz="0.0181 0 -0.013" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0022 0.0334 0.02"/>
+            </geometry>
+            <origin xyz="0.0181 0 -0.013" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- vertical  -->
+        
     </link>
 </robot>
