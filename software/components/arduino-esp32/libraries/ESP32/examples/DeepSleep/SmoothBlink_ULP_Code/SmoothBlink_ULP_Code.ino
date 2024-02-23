@@ -17,7 +17,7 @@
 uint32_t *fadeCycleDelay = &RTC_SLOW_MEM[RTC_fadeDelay];
 #define ULP_START_OFFSET 32
 
-// For ESP32 Arduino, it is usually at offeset 512, defined in sdkconfig
+// For ESP32 Arduino, it is usually at offeset 512, defined in
 RTC_DATA_ATTR uint32_t ULP_Started = 0; // 0 or 1
 
 //Time-to-Sleep
