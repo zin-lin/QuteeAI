@@ -27,10 +27,6 @@
         <color rgba="0 0 0 1"/>
     </material>
 
-    <material name="white">
-        <color rgba="1 1 1 1"/>
-    </material>
-
     <material name="blue">
         <color rgba="0 0 1 1"/>
     </material>
@@ -993,6 +989,526 @@
             </geometry>
             <origin xyz="0 0 0" rpy="0 0 0"/>
             <material name="black"/>
+        </visual>
+    </link>
+
+
+    <!-- legs ////////////////////////////////////////////////////////////////////////////////// -->
+    <!-- center of joint rotation is set to be center of the clockwise side_link horizontally when viewed from above and inline with the motor drive,
+         the rest of the link is offset from there -->
+    <!-- front leg ///////////////////////////////////////// -->
+    <joint name="front_leg_motor_front_leg_joint" type="continuous">
+        <parent link="front_leg_motor_link"/>
+        <child link="front_leg_link"/>
+        <origin xyz="0.0075 -0.0126 0" rpy="0 0 0"/>
+        <axis xyz="0 1 0"/>
+    </joint>
+
+    <link name="front_leg_link">
+        <!-- top straight pieces -->
+        <visual>
+            <geometry>
+                <box size="0.01 0.0022 0.0242"/>
+            </geometry>
+            <origin xyz="0 -0.003 0.0219" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.01 0.0022 0.0242"/>
+            </geometry>
+            <origin xyz="0 0.0282 0.0219" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- top diagonals -->
+        <visual>
+            <geometry>
+                <box size="0.005 0.0022 0.0247"/>
+            </geometry>
+            <origin xyz="-0.0052 -0.003 0.0214" rpy="0 0.1923 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.005 0.0022 0.0247"/>
+            </geometry>
+            <origin xyz="0.0052 -0.003 0.0214" rpy="0 -0.1923 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.005 0.0022 0.0247"/>
+            </geometry>
+            <origin xyz="-0.0052 0.0282 0.0214" rpy="0 0.1923 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.005 0.0022 0.0247"/>
+            </geometry>
+            <origin xyz="0.0052 0.0282 0.0214" rpy="0 -0.1923 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- center side pieces -->
+        <visual>
+            <geometry>
+                <box size="0.02 0.0022 0.081"/>
+            </geometry>
+            <origin xyz="0 -0.003 -0.0307" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.02 0.0022 0.081"/>
+            </geometry>
+            <origin xyz="0 0.0282 -0.0307" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- cross beams -->
+        <visual>
+            <geometry>
+                <box size="0.02 0.0334 0.0022"/>
+            </geometry>
+            <origin xyz="0 0.0126 -0.0438" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.02 0.0334 0.0049"/>
+            </geometry>
+            <origin xyz="0 0.0126 -0.0663" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- lower side pieces -->
+        <visual>
+            <geometry>
+                <box size="0.02 0.0025 0.0139"/>
+            </geometry>
+            <origin xyz="0 -0.00535 -0.06325" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.02 0.0025 0.0139"/>
+            </geometry>
+            <origin xyz="0 0.03055 -0.06325" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- bottom diagonals -->
+        <visual>
+            <geometry>
+                <box size="0.02 0.0022 0.0207"/>
+            </geometry>
+            <origin xyz="0 0.00127 -0.0767" rpy="0.76 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.02 0.0022 0.0207"/>
+            </geometry>
+            <origin xyz="0 0.02393 -0.0767" rpy="-0.76 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- bottom horizontal -->
+        <visual>
+            <geometry>
+                <box size="0.02 0.0099 0.0022"/>
+            </geometry>
+            <origin xyz="0 0.0126 -0.0839" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+    </link>
+
+    <!-- rear leg ///////////////////////////////////////// -->
+    <joint name="rear_leg_motor_rear_leg_joint" type="continuous">
+        <parent link="rear_leg_motor_link"/>
+        <child link="rear_leg_link"/>
+        <origin xyz="-0.0075 -0.0126 0" rpy="0 0 0"/>
+        <axis xyz="0 -1 0"/>
+    </joint>
+
+    <link name="rear_leg_link">
+        <!-- top straight pieces -->
+        <visual>
+            <geometry>
+                <box size="0.01 0.0022 0.0242"/>
+            </geometry>
+            <origin xyz="0 -0.003 0.0219" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.01 0.0022 0.0242"/>
+            </geometry>
+            <origin xyz="0 0.0282 0.0219" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- top diagonals -->
+        <visual>
+            <geometry>
+                <box size="0.005 0.0022 0.0247"/>
+            </geometry>
+            <origin xyz="0.0052 -0.003 0.0214" rpy="0 -0.1923 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.005 0.0022 0.0247"/>
+            </geometry>
+            <origin xyz="-0.0052 -0.003 0.0214" rpy="0 0.1923 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.005 0.0022 0.0247"/>
+            </geometry>
+            <origin xyz="0.0052 0.0282 0.0214" rpy="0 -0.1923 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.005 0.0022 0.0247"/>
+            </geometry>
+            <origin xyz="-0.0052 0.0282 0.0214" rpy="0 0.1923 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- center side pieces -->
+        <visual>
+            <geometry>
+                <box size="0.02 0.0022 0.081"/>
+            </geometry>
+            <origin xyz="0 -0.003 -0.0307" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.02 0.0022 0.081"/>
+            </geometry>
+            <origin xyz="0 0.0282 -0.0307" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- cross beams -->
+        <visual>
+            <geometry>
+                <box size="0.02 0.0334 0.0022"/>
+            </geometry>
+            <origin xyz="0 0.0126 -0.0438" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.02 0.0334 0.0049"/>
+            </geometry>
+            <origin xyz="0 0.0126 -0.0663" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- lower side pieces -->
+        <visual>
+            <geometry>
+                <box size="0.02 0.0025 0.0139"/>
+            </geometry>
+            <origin xyz="0 -0.00535 -0.06325" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.02 0.0025 0.0139"/>
+            </geometry>
+            <origin xyz="0 0.03055 -0.06325" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- bottom diagonals -->
+        <visual>
+            <geometry>
+                <box size="0.02 0.0022 0.0207"/>
+            </geometry>
+            <origin xyz="0 0.00127 -0.0767" rpy="0.76 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.02 0.0022 0.0207"/>
+            </geometry>
+            <origin xyz="0 0.02393 -0.0767" rpy="-0.76 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- bottom horizontal -->
+        <visual>
+            <geometry>
+                <box size="0.02 0.0099 0.0022"/>
+            </geometry>
+            <origin xyz="0 0.0126 -0.0839" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+    </link>
+
+    <!-- left leg ///////////////////////////////////////// -->
+    <joint name="left_leg_motor_left_leg_joint" type="continuous">
+        <parent link="left_leg_motor_link"/>
+        <child link="left_leg_link"/>
+        <origin xyz="-0.0126 0.0075 0" rpy="0 0 0"/>
+        <axis xyz="-1 0 0"/>
+    </joint>
+
+    <link name="left_leg_link">
+        <!-- top straight pieces -->
+        <visual>
+            <geometry>
+                <box size="0.0022 0.01 0.0242"/>
+            </geometry>
+            <origin xyz="-0.003 0 0.0219" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0022 0.01 0.0242"/>
+            </geometry>
+            <origin xyz="0.0282 0 0.0219" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- top diagonals -->
+        <visual>
+            <geometry>
+                <box size="0.0022 0.005 0.0247"/>
+            </geometry>
+            <origin xyz="-0.003 -0.0052 0.0214" rpy="-0.1923 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0022 0.005 0.0247"/>
+            </geometry>
+            <origin xyz="-0.003 0.0052 0.0214" rpy="0.1923 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0022 0.005 0.0247"/>
+            </geometry>
+            <origin xyz="0.0282 -0.0052 0.0214" rpy="-0.1923 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0022 0.005 0.0247"/>
+            </geometry>
+            <origin xyz="0.0282 0.0052 0.0214" rpy="0.1923 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- center side pieces -->
+        <visual>
+            <geometry>
+                <box size="0.0022 0.02 0.081"/>
+            </geometry>
+            <origin xyz="-0.003 0 -0.0307" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0022 0.02 0.081"/>
+            </geometry>
+            <origin xyz="0.0282 0 -0.0307" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- cross beams -->
+        <visual>
+            <geometry>
+                <box size="0.0334 0.02 0.0022"/>
+            </geometry>
+            <origin xyz="0.0126 0 -0.0438" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0334 0.02 0.0049"/>
+            </geometry>
+            <origin xyz="0.0126 0 -0.0663" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- lower side pieces -->
+        <visual>
+            <geometry>
+                <box size="0.0025 0.02 0.0139"/>
+            </geometry>
+            <origin xyz="-0.00535 0 -0.06325" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0025 0.02 0.0139"/>
+            </geometry>
+            <origin xyz="0.03055 0 -0.06325" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- bottom diagonals -->
+        <visual>
+            <geometry>
+                <box size="0.0022 0.02 0.0207"/>
+            </geometry>
+            <origin xyz="0.00127 0 -0.0767" rpy="0 -0.76 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0022 0.02 0.0207"/>
+            </geometry>
+            <origin xyz="0.02393 0 -0.0767" rpy="0 0.76 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- bottom horizontal -->
+        <visual>
+            <geometry>
+                <box size="0.0099 0.02 0.0022"/>
+            </geometry>
+            <origin xyz="0.0126 0 -0.0839" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+    </link>
+
+    <!-- right leg ///////////////////////////////////////// -->
+    <joint name="right_leg_motor_right_leg_joint" type="continuous">
+        <parent link="right_leg_motor_link"/>
+        <child link="right_leg_link"/>
+        <origin xyz="-0.0126 -0.0075 0" rpy="0 0 0"/>
+        <axis xyz="1 0 0"/>
+    </joint>
+
+    <link name="right_leg_link">
+        <!-- top straight pieces -->
+        <visual>
+            <geometry>
+                <box size="0.0022 0.01 0.0242"/>
+            </geometry>
+            <origin xyz="-0.003 0 0.0219" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0022 0.01 0.0242"/>
+            </geometry>
+            <origin xyz="0.0282 0 0.0219" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- top diagonals -->
+        <visual>
+            <geometry>
+                <box size="0.0022 0.005 0.0247"/>
+            </geometry>
+            <origin xyz="-0.003 0.0052 0.0214" rpy="0.1923 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0022 0.005 0.0247"/>
+            </geometry>
+            <origin xyz="-0.003 -0.0052 0.0214" rpy="-0.1923 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0022 0.005 0.0247"/>
+            </geometry>
+            <origin xyz="0.0282 0.0052 0.0214" rpy="0.1923 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0022 0.005 0.0247"/>
+            </geometry>
+            <origin xyz="0.0282 -0.0052 0.0214" rpy="-0.1923 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- center side pieces -->
+        <visual>
+            <geometry>
+                <box size="0.0022 0.02 0.081"/>
+            </geometry>
+            <origin xyz="-0.003 0 -0.0307" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0022 0.02 0.081"/>
+            </geometry>
+            <origin xyz="0.0282 0 -0.0307" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- cross beams -->
+        <visual>
+            <geometry>
+                <box size="0.0334 0.02 0.0022"/>
+            </geometry>
+            <origin xyz="0.0126 0 -0.0438" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0334 0.02 0.0049"/>
+            </geometry>
+            <origin xyz="0.0126 0 -0.0663" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- lower side pieces -->
+        <visual>
+            <geometry>
+                <box size="0.0025 0.02 0.0139"/>
+            </geometry>
+            <origin xyz="-0.00535 0 -0.06325" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0025 0.02 0.0139"/>
+            </geometry>
+            <origin xyz="0.03055 0 -0.06325" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- bottom diagonals -->
+        <visual>
+            <geometry>
+                <box size="0.0022 0.02 0.0207"/>
+            </geometry>
+            <origin xyz="0.00127 0 -0.0767" rpy="0 -0.76 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0022 0.02 0.0207"/>
+            </geometry>
+            <origin xyz="0.02393 0 -0.0767" rpy="0 0.76 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- bottom horizontal -->
+        <visual>
+            <geometry>
+                <box size="0.0099 0.02 0.0022"/>
+            </geometry>
+            <origin xyz="0.0126 0 -0.0839" rpy="0 0 0"/>
+            <material name="green"/>
         </visual>
     </link>
 </robot>
