@@ -48,6 +48,13 @@
 
         leg collision tags are defined via multiple dummy links to allow for accurate modeling of feet
         leg inertial tags are only defined once per leg taking into account the entire leg (including dummies)
+
+
+        Revolute joints are set to 10 velocity and 10 effort, these are initial guesses and most likely need adjusted during testing
+        Joint upper and lower limits - potentially need adjusting:
+            doubleU joints set to 90 degrees 
+            thigh joints set to 110 degrees
+            leg joints set to 240 degrees (lower) and 60 degrees (upper) - note joint is default to begin perpendicular to thigh
     -->
 
     <material name="grey">
@@ -567,12 +574,14 @@
          and centre of the corner section horizontally as if centreed around where the horn would be,
          the rest of the link is offset from there -->
     <!-- front doubleU ///////////////////////////////////////// -->
-    <joint name="front_body_motor_front_doubleu_joint" type="continuous">
+    <joint name="front_body_motor_front_doubleu_joint" type="revolute">
         <parent link="front_body_motor_link"/>
         <child link="front_doubleu_link"/>
         <origin xyz="0.0075 0 0.013" rpy="0 0 0"/>
         <axis xyz="0 0 -1"/>
+        <limit lower="-1.5708" upper="1.5708" velocity="10.0" effort="10.0"/> 
     </joint>
+    
 
     <!-- doubleu link is 0.0562 x 0.0334 x 0.0334 overall -->
     <link name="front_doubleu_link">
@@ -668,11 +677,12 @@
     </link>
 
     <!-- rear doubleU ///////////////////////////////////////// -->
-    <joint name="rear_body_motor_rear_doubleu_joint" type="continuous">
+    <joint name="rear_body_motor_rear_doubleu_joint" type="revolute">
         <parent link="rear_body_motor_link"/>
         <child link="rear_doubleu_link"/>
         <origin xyz="-0.0075 0 0.013" rpy="0 0 0"/>
         <axis xyz="0 0 -1"/>
+        <limit lower="-1.5708" upper="1.5708" velocity="10.0" effort="10.0"/> 
     </joint>
 
     <!-- doubleu link is 0.0562 x 0.0334 x 0.0334 overall -->
@@ -769,11 +779,12 @@
     </link>
 
     <!-- left doubleU ///////////////////////////////////////// -->
-    <joint name="left_body_motor_left_doubleu_joint" type="continuous">
+    <joint name="left_body_motor_left_doubleu_joint" type="revolute">
         <parent link="left_body_motor_link"/>
         <child link="left_doubleu_link"/>
         <origin xyz="0 0.0075 0.013" rpy="0 0 0"/>
         <axis xyz="0 0 -1"/>
+        <limit lower="-1.5708" upper="1.5708" velocity="10.0" effort="10.0"/> 
     </joint>
 
     <!-- doubleu link is 0.0562 x 0.0334 x 0.0334 overall -->
@@ -870,11 +881,12 @@
     </link>
 
     <!-- right doubleU ///////////////////////////////////////// -->
-    <joint name="right_body_motor_right_doubleu_joint" type="continuous">
+    <joint name="right_body_motor_right_doubleu_joint" type="revolute">
         <parent link="right_body_motor_link"/>
         <child link="right_doubleu_link"/>
         <origin xyz="0 -0.0075 0.013" rpy="0 0 0"/>
         <axis xyz="0 0 -1"/>
+        <limit lower="-1.5708" upper="1.5708" velocity="10.0" effort="10.0"/> 
     </joint>
 
     <!-- doubleu link is 0.0562 x 0.0334 x 0.0334 overall -->
@@ -975,11 +987,12 @@
     <!-- centre of joint rotation is set to be horizontally centreer of the outer most rounded end part of the 
          doubleu on the clockwise side when viewed from above,
          the rest of the link is offset from there -->
-    <joint name="front_doubleu_front_thigh_motor_joint" type="continuous">
+    <joint name="front_doubleu_front_thigh_motor_joint" type="revolute">
         <parent link="front_doubleu_link"/>
         <child link="front_thigh_motor_link"/>
         <origin xyz="0.0362 -0.0156 -0.013" rpy="0 0 0"/>
         <axis xyz="0 1 0"/>
+        <limit lower="-1.9199" upper="1.9199" velocity="10.0" effort="10.0"/> 
     </joint>
 
     <link name="front_thigh_motor_link">
@@ -1006,11 +1019,12 @@
         </inertial>
     </link>
 
-    <joint name="rear_doubleu_rear_thigh_motor_joint" type="continuous">
+    <joint name="rear_doubleu_rear_thigh_motor_joint" type="revolute">
         <parent link="rear_doubleu_link"/>
         <child link="rear_thigh_motor_link"/>
         <origin xyz="-0.0362 -0.0156 -0.013" rpy="0 0 0"/>
         <axis xyz="0 -1 0"/>
+        <limit lower="-1.9199" upper="1.9199" velocity="10.0" effort="10.0"/> 
     </joint>
 
     <link name="rear_thigh_motor_link">
@@ -1037,11 +1051,12 @@
         </inertial>
     </link>
 
-    <joint name="left_doubleu_left_thigh_motor_joint" type="continuous">
+    <joint name="left_doubleu_left_thigh_motor_joint" type="revolute">
         <parent link="left_doubleu_link"/>
         <child link="left_thigh_motor_link"/>
         <origin xyz="-0.0156 0.0362 -0.013" rpy="0 0 0"/>
         <axis xyz="-1 0 0"/>
+        <limit lower="-1.9199" upper="1.9199" velocity="10.0" effort="10.0"/> 
     </joint>
 
     <link name="left_thigh_motor_link">
@@ -1068,11 +1083,12 @@
         </inertial>
     </link>
 
-    <joint name="right_doubleu_right_thigh_motor_joint" type="continuous">
+    <joint name="right_doubleu_right_thigh_motor_joint" type="revolute">
         <parent link="right_doubleu_link"/>
         <child link="right_thigh_motor_link"/>
         <origin xyz="-0.0156 -0.0362 -0.013" rpy="0 0 0"/>
         <axis xyz="1 0 0"/>
+        <limit lower="-1.9199" upper="1.9199" velocity="10.0" effort="10.0"/> 
     </joint>
 
     <link name="right_thigh_motor_link">
@@ -1380,11 +1396,12 @@
     <!-- centre of joint rotation is set to be centre of the clockwise side_link horizontally when viewed from above and inline with the motor drive,
          the rest of the link is offset from there -->
     <!-- front leg ///////////////////////////////////////// -->
-    <joint name="front_leg_motor_front_leg_joint" type="continuous">
+    <joint name="front_leg_motor_front_leg_joint" type="revolute">
         <parent link="front_leg_motor_link"/>
         <child link="front_leg_link"/>
         <origin xyz="0.0075 -0.0126 0" rpy="0 0 0"/>
         <axis xyz="0 1 0"/>
+        <limit lower="-4.18879" upper="1.0472" velocity="10.0" effort="10.0"/> 
     </joint>
 
     <link name="front_leg_link">
@@ -1622,11 +1639,12 @@
 
 
     <!-- rear leg ///////////////////////////////////////// -->
-    <joint name="rear_leg_motor_rear_leg_joint" type="continuous">
+    <joint name="rear_leg_motor_rear_leg_joint" type="revolute">
         <parent link="rear_leg_motor_link"/>
         <child link="rear_leg_link"/>
         <origin xyz="-0.0075 -0.0126 0" rpy="0 0 0"/>
         <axis xyz="0 -1 0"/>
+        <limit lower="-4.18879" upper="1.0472" velocity="10.0" effort="10.0"/> 
     </joint>
 
     <link name="rear_leg_link">
@@ -1864,11 +1882,12 @@
 
 
     <!-- left leg ///////////////////////////////////////// -->
-    <joint name="left_leg_motor_left_leg_joint" type="continuous">
+    <joint name="left_leg_motor_left_leg_joint" type="revolute">
         <parent link="left_leg_motor_link"/>
         <child link="left_leg_link"/>
         <origin xyz="-0.0126 0.0075 0" rpy="0 0 0"/>
         <axis xyz="-1 0 0"/>
+        <limit lower="-4.18879" upper="1.0472" velocity="10.0" effort="10.0"/> 
     </joint>
 
     <link name="left_leg_link">
@@ -2106,11 +2125,12 @@
 
 
     <!-- right leg ///////////////////////////////////////// -->
-    <joint name="right_leg_motor_right_leg_joint" type="continuous">
+    <joint name="right_leg_motor_right_leg_joint" type="revolute">
         <parent link="right_leg_motor_link"/>
         <child link="right_leg_link"/>
         <origin xyz="-0.0126 -0.0075 0" rpy="0 0 0"/>
         <axis xyz="1 0 0"/>
+        <limit lower="-4.18879" upper="1.0472" velocity="10.0" effort="10.0"/> 
     </joint>
 
     <link name="right_leg_link">
