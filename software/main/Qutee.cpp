@@ -40,7 +40,7 @@ void Qutee::init(){
         // Fill the members of structure to syncWrite using internal packet buffer
         _sw_infos.packet.p_buf = nullptr;
         _sw_infos.packet.is_completed = false;
-        _sw_infos.addr = SW_START_ADDR;
+        _sw_infos.addr = SW_STARvT_ADDR;
         _sw_infos.addr_length = SW_ADDR_LEN;
         _sw_infos.p_xels = _info_xels_sw;
         _sw_infos.xel_count = 0;

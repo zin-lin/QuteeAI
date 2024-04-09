@@ -1,0 +1,4 @@
+. ./export.sh
+export PATH="~/esp-idf/tools:$PATH"
+echo 'export PATH="$~/esp-idf/tools:$PATH"' >> ~/.bashrc
+idf.py  --version
