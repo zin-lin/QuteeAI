@@ -6,6 +6,6 @@ cmake_minimum_required(VERSION 3.5)
 
 idf_component_register(SRCS "Adafruit_GFX.cpp" "Adafruit_GrayOLED.cpp" "Adafruit_SPITFT.cpp" "glcdfont.c"
                        INCLUDE_DIRS "."
-                       REQUIRES Adafruit_BusIO)
+                       REQUIRES Adafruit_BusIO arduino)
 
 project(Adafruit-GFX-Library)

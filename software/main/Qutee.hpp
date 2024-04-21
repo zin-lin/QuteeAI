@@ -12,7 +12,7 @@
 #undef HIGH // undef macro from adruino lib
 #undef LOW // undef macro from arduino lib
 
-#include "arduino.h"
+#include "Ahrduino.h"
 #include <Wire.h>
 
 #include <Adafruit_Sensor.h>

@@ -1,2 +1,4 @@
-idf_component_register(SRCS "usb.cpp"
-                    INCLUDE_DIRS ".")
+
+
+idf_component_register(SRCS "usb.cpp" INCLUDE_DIRS "."
+)

@@ -4,8 +4,8 @@
 #include "freertos/timers.h"
 #include "freertos/event_groups.h"
 #include "esp_wifi.h"
-#include "esp_log.h"
 #include "nvs_flash.h"
+#include "esp_log.h"
 #include "esp_netif.h"
 #include "esp_http_server.h"
 
@@ -20,8 +20,9 @@
 #include "esp_system.h"
 #include "esp_netif.h"
 
-#define SSID "smth"
-#define PASS "smth"
+#define SSID "Moto G"
+#define PASS "83f17b859413"
+#define TAG "WIFI"
 
 static void cmd_ping_on_ping_success(esp_ping_handle_t hdl, void *args)
 {
@@ -77,15 +78,21 @@ static void wifi_event_handler(void *event_handler_arg, esp_event_base_t event_b
             printf("WiFi lost connection WIFI_EVENT_STA_DISCONNECTED ... \n");
             break;
         case IP_EVENT_STA_GOT_IP:
-            printf("WiFi got IP ... \n\n");
+        {
+            ip_event_got_ip_t* event = (ip_event_got_ip_t*) event_data;
+            ESP_LOGI(TAG, "WiFi got IP: %s\n\n", ip4addr_ntoa((const ip4_addr_t *)&event->ip_info.ip));
+
+        }
             break;
         default:
             break;
     }
 }
 
+
 void wifi_connection()
 {
+    nvs_flash_init();
     esp_netif_init();
     esp_event_loop_create_default();
     esp_netif_create_default_wifi_sta();
@@ -125,9 +132,10 @@ void server_initiation()
 
 void app_main(void)
 {
+    vTaskDelay(10000);
     wifi_connection();
     server_initiation();
 
-    vTaskDelay(3000 / portTICK_PERIOD_MS);
+    vTaskDelay(30000 / portTICK_PERIOD_MS);
     do_ping_cmd();
 }
