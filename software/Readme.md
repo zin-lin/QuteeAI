@@ -54,7 +54,7 @@ Then the VBat to the VAT line and use crimps to connect two wires which are sold
   - Hit RsT button 
   - The robot should start moving
   - disconnect batteries to stop.
-  - ![Connection](con.png)
+  - ![Connection](conn.png)
 
 ### Solution 3
 - This is using the U2D2 and the PHB set for it 
