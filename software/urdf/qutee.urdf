@@ -984,7 +984,7 @@
 
 
     <!-- thigh motors ////////////////////////////////////////////////////////////////////////////////// -->
-    <!-- centre of joint rotation is set to be horizontally centreer of the outer most rounded end part of the 
+    <!-- centre of joint rotation is set to be horizontally centre of the outer most rounded end part of the 
          doubleu on the clockwise side when viewed from above,
          the rest of the link is offset from there -->
     <joint name="front_doubleu_front_thigh_motor_joint" type="revolute">
