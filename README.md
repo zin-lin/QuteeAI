@@ -134,3 +134,25 @@ TBC
     git remote add origin git@github.com:zin-lin/QuteeAI.git
     git pull origin master
     ```
+
+# Software Compilation and Process
+The Software for the Qutee Robot will mainly depend on what hardware component is used during the assembly process.
+Use the `Adaptive` folder if you are following what `adaptive-intelligent-robotics` are doing. 
+Otherwise, for simple operations and starting with Robotics you may use any other folder inside `software` folder.
+The following are components are for all solutions. 
+
+## Electronics Hardware Components
+
+- `12x` XL330 m288t or XL330 m077 Motors [Dynamixel.](https://robotis.co.uk/robotis-dynamixel-xl330-m288-t.html)
+- `1x`  Adafruit ESP32s3 Reverse Feather TFT [Adafruit.](https://learn.adafruit.com/esp32-s3-reverse-tft-feather/overview)
+  - Do Not buy the [ESP32s3 TFT](https://learn.adafruit.com/adafruit-esp32-s3-tft-feather/overview) because we are not sure if that solution will work or not as the `Dynamixel2Arduino` Library is not transmitting `TX channel` on said board.
+- `1x` Dynamixel Shield [Dynamixel.](https://learn.adafruit.com/adafruit-esp32-s3-tft-feather/overview)
+- `1x` Dynamixel U2D2 PHB [Dynamixel.](https://emanual.robotis.com/docs/en/parts/interface/u2d2_power_hub/)
+- `1x` Dynamixel U2D2 Device [Dynamixel.](https://emanual.robotis.com/docs/en/parts/interface/u2d2/)
+- `1x` Arduino Uno Rev 3 Board [Arduino.](https://docs.arduino.cc/hardware/uno-rev3/)
+- `1x` Arduino ESP32 Nano [Arduino.](https://docs.arduino.cc/hardware/nano-esp32/)
+
+### Please follow the commands under the software folder to deal with Firmware build and flash.
+
+
+

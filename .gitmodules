@@ -28,3 +28,6 @@
 [submodule "software/components/Adafruit_MAX1704X"]
 	path = software/components/Adafruit_MAX1704X
 	url = https://github.com/adafruit/Adafruit_MAX1704X.git
+[submodule "software/Adaptive_Qutee_by_Adaptive_Intelligence_robotics"]
+	path = software/Adaptive_Qutee_by_Adaptive_Intelligence_robotics
+	url = https://github.com/adaptive-intelligent-robotics/Qutee_v2
