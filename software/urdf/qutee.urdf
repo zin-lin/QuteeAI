@@ -1,0 +1,2368 @@
+<?xml version="1.0"?>
+<robot name="qutee_robot">
+
+    <!-- 
+        axes information-
+                        positive / negative
+        x-axis(red)  :  forwards / backwards 
+        y-axis(green):  left     / right 
+        z-axis(blue) :  up       / down
+        (from the robots point of view)
+        colours are axes as seen in rviz
+
+        positive joint rotation results in a clockwise motor drive when viewed from above the motor
+
+        dimensions are in meters
+
+
+        masses have been taken from the fusion assembly file and converted to kg (to 5dp) unless otherwise specified
+        collision and inertial origins have been set for the centre of the links with collision tags being approximated to simpler shapes
+        inertia values have been calculated as follows -
+        moments of inertia calculations (approximations assume uniform mass distribution and centre of mass at the origin):
+
+            Ixx​: Moment of inertia about the X-axis
+            Iyy​: Moment of inertia about the Y-axis
+            Izz​: Moment of inertia about the Z-axis
+            Ixy: Product of inertia about the XY plane (usually zero for a box/cylinder)
+            Ixz​: Product of inertia about the XZ plane (usually zero for a box/cylinder)
+            Iyz: Product of inertia about the YZ plane (usually zero for a box/cylinder)
+
+            For a rectangular box with dimensions a, b, and c along the X, Y, and Z axes respectively, the moments of inertia are given by the following formulas:
+
+            Ixx=(1/12)*m*(b^2+c^2)
+            Iyy=(1/12)*m*(a^2+c^2)
+            Izz=(1/12)*m*(a^2+b^2)
+
+            For a solid cylinder with radius r and height h along the Z-axis, the moments of inertia are as follows:
+
+            Ixx=(1/12)*m*(3*(r^2)+h^2)
+            Iyy=Ixx (symmetric about the Z-axis)
+            Izz=(1/12)*m*(r^2)
+
+            where m is the mass of the box/cylinder
+
+
+
+        if issues with collisions, check doubleu links and out to legs as some collision tags overlap others
+        (doubleu link is approximated as a single box, thighs have collision tags for each motor whilst the 2 sides per thigh are another single collision tag)
+
+        leg collision tags are defined via multiple dummy links to allow for accurate modeling of feet
+        leg inertial tags are only defined once per leg taking into account the entire leg (including dummies)
+
+
+        Revolute joints are set to 10 velocity and 10 effort, these are initial guesses and most likely need adjusted during testing
+        Joint upper and lower limits - potentially need adjusting:
+            doubleU joints set to 90 degrees 
+            thigh joints set to 110 degrees
+            leg joints set to 240 degrees (lower) and 60 degrees (upper) - note joint is default to begin perpendicular to thigh
+    -->
+
+    <material name="grey">
+        <color rgba="0.7 0.7 0.7 1"/>
+    </material>
+
+    <material name="green">
+        <color rgba="0 0.6 0 1"/>
+    </material>
+
+    <material name="black">
+        <color rgba="0 0 0 1"/>
+    </material>
+
+    <material name="blue">
+        <color rgba="0 0 1 1"/>
+    </material>
+
+    <link name="world_link" />
+    
+    <joint name="world_base_footprint_joint" type="fixed">
+        <parent link="world_link"/>
+        <child link="base_footprint_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <link name="base_footprint_link" />
+        
+    <joint name="base_joint" type="fixed">
+        <parent link="base_footprint_link"/>
+        <child link="base_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+
+    <!-- represents the battery box as seen in the assembly stl (refer to fusion360) -->
+    <link name="base_link">
+        <visual>
+            <geometry>
+                <box size="0.035 0.034 0.03"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <material name="grey"/>
+        </visual>
+
+        <collision>
+            <geometry>
+                <box size="0.035 0.034 0.03"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </collision>
+
+        <inertial>
+            <mass value="0.28667"/>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <inertia ixx="4.9e-5" ixy="0" ixz="0" iyy="5.1e-5" iyz="0" izz="5.7e-5"/>
+        </inertial>
+    </link>
+
+
+    <!-- body bottom (lower base) ////////////////////////////////////////////////////////////////////////////////// -->
+    <joint name="body_bt_sq_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="body_bottom_sq_link"/>
+        <origin xyz="0 0 -0.0145" rpy="0 0 0"/>
+    </joint>
+
+    <!-- top of body bottom is 0.031 down from top of battery box -->
+    <!-- overall dimensions of bottom base is 0.114 x 0.114 x 0.002, but corners are constructed from cylinders -->
+    <link name="body_bottom_sq_link">
+
+        <!-- square centre -->
+        <visual>
+            <geometry>
+                <box size="0.078 0.078 0.002"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0.7854"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- front corner -->
+        <visual>
+            <geometry>
+                <cylinder radius="0.014" length="0.002"/>
+            </geometry>
+            <origin xyz="0.043 0 0" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- rear corner -->
+        <visual>
+            <geometry>
+                <cylinder radius="0.014" length="0.002"/>
+            </geometry>
+            <origin xyz="-0.043 0 0" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- left corner -->
+        <visual>
+            <geometry>
+                <cylinder radius="0.014" length="0.002"/>
+            </geometry>
+            <origin xyz="0 0.043 0" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- right corner -->
+        <visual>
+            <geometry>
+                <cylinder radius="0.014" length="0.002"/>
+            </geometry>
+            <origin xyz="0 -0.043 0" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <collision>
+            <geometry>
+                <box size="0.0888 0.0888 0.002"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0.7854"/>
+        </collision>
+
+        <inertial>
+            <mass value="0.09567"/>
+            <origin xyz="0 0 0" rpy="0 0 0.7854"/>
+            <inertia ixx="6.3e-5" ixy="0" ixz="0" iyy="6.3e-5" iyz="0" izz="1.26e-4"/>
+        </inertial>
+    </link>
+
+
+    <!-- body base (top base) ////////////////////////////////////////////////////////////////////////////////// -->
+    <joint name="body_base_sq_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="body_base_sq_link"/>
+        <origin xyz="0 0 0.0115" rpy="0 0 0"/>
+    </joint>
+
+    <!-- bottom of body base is 0.028 up from bottom of battery box -->
+    <!-- overall dimensions of bottom base is 0.114 x 0.114 x 0.002, but corners are constructed from cylinders -->
+    <link name="body_base_sq_link">
+
+        <!-- square centre -->
+        <visual>
+            <geometry>
+                <box size="0.078 0.078 0.002"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0.7854"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- front corner -->
+        <visual>
+            <geometry>
+                <cylinder radius="0.014" length="0.002"/>
+            </geometry>
+            <origin xyz="0.043 0 0" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- rear corner -->
+        <visual>
+            <geometry>
+                <cylinder radius="0.014" length="0.002"/>
+            </geometry>
+            <origin xyz="-0.043 0 0" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- left corner -->
+        <visual>
+            <geometry>
+                <cylinder radius="0.014" length="0.002"/>
+            </geometry>
+            <origin xyz="0 0.043 0" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- right corner -->
+        <visual>
+            <geometry>
+                <cylinder radius="0.014" length="0.002"/>
+            </geometry>
+            <origin xyz="0 -0.043 0" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <collision>
+            <geometry>
+                <box size="0.0888 0.0888 0.002"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0.7854"/>
+        </collision>
+
+        <inertial>
+            <mass value="0.09567"/>
+            <origin xyz="0 0 0" rpy="0 0 0.7854"/>
+            <inertia ixx="6.3e-5" ixy="0" ixz="0" iyy="6.3e-5" iyz="0" izz="1.26e-4"/>
+        </inertial>
+    </link>
+
+
+    <!-- top case ////////////////////////////////////////////////////////////////////////////////// -->
+    <joint name="body_base_sq_top_case_joint" type="fixed">
+        <parent link="body_base_sq_link"/>
+        <child link="top_case_link"/>
+        <origin xyz="0 0 0.01055" rpy="0 0 0"/>
+    </joint>
+
+    <link name="top_case_link">
+        <!-- horizontal components -->
+        <visual>
+            <geometry>
+                <box size="0.0085 0.0544 0.0055"/>
+            </geometry>
+            <origin xyz="-0.0259 0 0.0091" rpy="0 0 0"/>
+            <material name="black"/>        
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0021 0.0544 0.002"/>
+            </geometry>
+            <origin xyz="-0.0024 0 0.01085" rpy="0 0 0"/>
+            <material name="black"/>        
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0336 0.0394 0.002"/>
+            </geometry>
+            <origin xyz="0.01335 0.0075 0.01085" rpy="0 0 0"/>
+            <material name="black"/>        
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0086 0.0544 0.0055"/>
+            </geometry>
+            <origin xyz="0.02585 0 0.0091" rpy="0 0 0"/>
+            <material name="black"/>        
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0603 0.0056 0.0055"/>
+            </geometry>
+            <origin xyz="0 0.0244 0.0091" rpy="0 0 0"/>
+            <material name="black"/>        
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0603 0.0055 0.0055"/>
+            </geometry>
+            <origin xyz="0 -0.02445 0.0091" rpy="0 0 0"/>
+            <material name="black"/>        
+        </visual>
+
+        <!-- corners -->
+        <visual>
+            <geometry>
+                <cylinder radius="0.0126" length="0.0237"/>
+            </geometry>
+            <origin xyz="0.0274 0.02445 0" rpy="0 0 0"/>
+            <material name="black"/>        
+        </visual>
+        <visual>
+            <geometry>
+                <cylinder radius="0.0126" length="0.0237"/>
+            </geometry>
+            <origin xyz="-0.0274 0.02445 0" rpy="0 0 0"/>
+            <material name="black"/>        
+        </visual>
+        <visual>
+            <geometry>
+                <cylinder radius="0.0126" length="0.0237"/>
+            </geometry>
+            <origin xyz="0.0274 -0.02445 0" rpy="0 0 0"/>
+            <material name="black"/>        
+        </visual>
+        <visual>
+            <geometry>
+                <cylinder radius="0.0126" length="0.0237"/>
+            </geometry>
+            <origin xyz="-0.0274 -0.02445 0" rpy="0 0 0"/>
+            <material name="black"/>        
+        </visual>
+
+        <collision>
+            <geometry>
+                <box size="0.08 0.0741 0.0237"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </collision>
+
+        <inertial>
+            <!-- mass includes top case + esp + u2d2 + tft spacer + u2d2 connector plugs as specified in fusion assembly (excludes male molex) -->
+            <mass value="0.17261"/>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <inertia ixx="8.7e-5" ixy="0" ixz="0" iyy="1e-4" iyz="0" izz="1.7e-4"/>
+        </inertial>
+    </link>
+
+
+    <!-- bottom case ////////////////////////////////////////////////////////////////////////////////// -->
+    <joint name="body_bottom_sq_bottom_case_joint" type="fixed">
+        <parent link="body_bottom_sq_link"/>
+        <child link="bottom_case_link"/>
+        <origin xyz="0 0 -0.0089" rpy="0 0 0"/>
+    </joint>
+
+    <link name="bottom_case_link">
+        <!-- horizontal components -->
+        <visual>
+            <geometry>
+                <box size="0.0630 0.057 0.0035"/>
+            </geometry>
+            <origin xyz="0 0 -0.0101" rpy="0 0 0"/>
+            <material name="black"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.003 0.057 0.0082"/>
+            </geometry>
+            <origin xyz="0.03 0 -0.00775" rpy="0 0 0"/>
+            <material name="black"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.003 0.057 0.0082"/>
+            </geometry>
+            <origin xyz="-0.03 0 -0.00775" rpy="0 0 0"/>
+            <material name="black"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0630 0.003 0.0082"/>
+            </geometry>
+            <origin xyz="0 0.027 -0.00775" rpy="0 0 0"/>
+            <material name="black"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0630 0.003 0.0082"/>
+            </geometry>
+            <origin xyz="0 -0.027 -0.00775" rpy="0 0 0"/>
+            <material name="black"/>
+        </visual>
+
+        <!-- corners -->
+        <visual>
+            <geometry>
+                <cylinder radius="0.0126" length="0.0237"/>
+            </geometry>
+            <origin xyz="0.0274 0.02445 0" rpy="0 0 0"/>
+            <material name="black"/>        
+        </visual>
+        <visual>
+            <geometry>
+                <cylinder radius="0.0126" length="0.0237"/>
+            </geometry>
+            <origin xyz="-0.0274 0.02445 0" rpy="0 0 0"/>
+            <material name="black"/>        
+        </visual>
+        <visual>
+            <geometry>
+                <cylinder radius="0.0126" length="0.0237"/>
+            </geometry>
+            <origin xyz="0.0274 -0.02445 0" rpy="0 0 0"/>
+            <material name="black"/>        
+        </visual>
+        <visual>
+            <geometry>
+                <cylinder radius="0.0126" length="0.0237"/>
+            </geometry>
+            <origin xyz="-0.0274 -0.02445 0" rpy="0 0 0"/>
+            <material name="black"/>        
+        </visual>
+
+        <collision>
+            <geometry>
+                <box size="0.08 0.0741 0.0237"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </collision>
+
+        <inertial>
+            <!-- mass includes bottom case + imu as specified in fusion assembly -->
+            <mass value="0.08877"/>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <inertia ixx="4.5e-5" ixy="0" ixz="0" iyy="5.1e-5" iyz="0" izz="8.8e-5"/>
+        </inertial>
+    </link>
+
+
+    <!-- body motors ////////////////////////////////////////////////////////////////////////////////// -->
+    <!-- see motor_doubleu joints for rotation -->
+    <joint name="body_base_sq_front_body_motor_joint" type="fixed">
+        <parent link="body_base_sq_link"/>
+        <child link="front_body_motor_link"/>
+        <origin xyz="0.0355 0 -0.013" rpy="0 0 0"/>
+    </joint>
+
+    <link name="front_body_motor_link">
+        <visual>
+            <geometry>
+                <box size="0.034 0.02 0.023"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <material name="black"/>
+        </visual>
+
+        <collision>
+            <geometry>
+                <box size="0.034 0.02 0.023"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </collision>
+
+        <inertial>
+            <!-- mass includes all parts listed under XL330 motor including horn spacer and screws as specified in fusion assembly -->
+            <mass value="0.12454"/>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <inertia ixx="9.6e-6" ixy="0" ixz="0" iyy="1.7e-5" iyz="0" izz="1.6e-5"/>
+        </inertial>
+    </link>
+
+    <joint name="body_base_sq_rear_body_motor_joint" type="fixed">
+        <parent link="body_base_sq_link"/>
+        <child link="rear_body_motor_link"/>
+        <origin xyz="-0.0355 0 -0.013" rpy="0 0 0"/>
+    </joint>
+
+    <link name="rear_body_motor_link">
+        <visual>
+            <geometry>
+                <box size="0.034 0.02 0.023"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <material name="black"/>
+        </visual>
+
+        <collision>
+            <geometry>
+                <box size="0.034 0.02 0.023"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </collision>
+
+        <inertial>
+            <!-- mass includes all parts listed under XL330 motor including horn spacer and screws as specified in fusion assembly -->
+            <mass value="0.12454"/>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <inertia ixx="9.6e-6" ixy="0" ixz="0" iyy="1.7e-5" iyz="0" izz="1.6e-5"/>
+        </inertial>
+    </link>
+
+    <joint name="body_base_sq_left_body_motor_joint" type="fixed">
+        <parent link="body_base_sq_link"/>
+        <child link="left_body_motor_link"/>
+        <origin xyz="0 0.0355 -0.013" rpy="0 0 0"/>
+    </joint>
+
+    <link name="left_body_motor_link">
+        <visual>
+            <geometry>
+                <box size="0.02 0.034 0.023"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <material name="black"/>
+        </visual>
+
+        <collision>
+            <geometry>
+                <box size="0.02 0.034 0.023"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </collision>
+
+        <inertial>
+            <!-- mass includes all parts listed under XL330 motor including horn spacer and screws as specified in fusion assembly -->
+            <mass value="0.12454"/>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <inertia ixx="1.7e-5" ixy="0" ixz="0" iyy="9.6e-6" iyz="0" izz="1.6e-5"/>
+        </inertial>
+    </link>
+
+    <joint name="body_base_sq_right_body_motor_joint" type="fixed">
+        <parent link="body_base_sq_link"/>
+        <child link="right_body_motor_link"/>
+        <origin xyz="0 -0.0355 -0.013" rpy="0 0 0"/>
+    </joint>
+
+    <link name="right_body_motor_link">
+        <visual>
+            <geometry>
+                <box size="0.02 0.034 0.023"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <material name="black"/>
+        </visual>
+
+        <collision>
+            <geometry>
+                <box size="0.02 0.034 0.023"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </collision>
+
+        <inertial>
+            <!-- mass includes all parts listed under XL330 motor including horn spacer and screws as specified in fusion assembly -->
+            <mass value="0.12454"/>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <inertia ixx="1.7e-5" ixy="0" ixz="0" iyy="9.6e-6" iyz="0" izz="1.6e-5"/>
+        </inertial>
+    </link>
+
+
+    <!-- doubleU connectors ////////////////////////////////////////////////////////////////////////////////// -->
+    <!-- centre of joint rotation is set to be centre of the body_base (top base) vertically 
+         and centre of the corner section horizontally as if centreed around where the horn would be,
+         the rest of the link is offset from there -->
+    <!-- front doubleU ///////////////////////////////////////// -->
+    <joint name="front_body_motor_front_doubleu_joint" type="revolute">
+        <parent link="front_body_motor_link"/>
+        <child link="front_doubleu_link"/>
+        <origin xyz="0.0075 0 0.013" rpy="0 0 0"/>
+        <axis xyz="0 0 -1"/>
+        <limit lower="-1.5708" upper="1.5708" velocity="10.0" effort="10.0"/> 
+    </joint>
+    
+
+    <!-- doubleu link is 0.0562 x 0.0334 x 0.0334 overall -->
+    <link name="front_doubleu_link">
+        <!-- horizontal components -->
+        <visual>
+            <geometry>
+                <cylinder radius="0.01" length="0.0022"/>
+            </geometry>
+            <origin xyz="0 0 0.0026" rpy="0 0 0"/>
+            <material name="green"/>    
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0181 0.02 0.0022"/>
+            </geometry>
+            <origin xyz="0.00905 0 0.0026" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <cylinder radius="0.01" length="0.0022"/>
+            </geometry>
+            <origin xyz="0 0 -0.0286" rpy="0 0 0"/>
+            <material name="green"/>    
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0181 0.02 0.0022"/>
+            </geometry>
+            <origin xyz="0.00905 0 -0.0286" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- central component -->
+        <visual>
+            <geometry>
+                <box size="0.0022 0.02 0.0334"/>
+            </geometry>
+            <origin xyz="0.0181 0 -0.013" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0022 0.0334 0.02"/>
+            </geometry>
+            <origin xyz="0.0181 0 -0.013" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- vertical  -->
+        <visual>
+            <geometry>
+                <cylinder radius="0.01" length="0.0022"/>
+            </geometry>
+            <origin xyz="0.0362 0.0156 -0.013" rpy="1.5708 0 0"/>
+            <material name="green"/>    
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0181 0.0022 0.02"/>
+            </geometry>
+            <origin xyz="0.02715 0.0156 -0.013" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <cylinder radius="0.01" length="0.0022"/>
+            </geometry>
+            <origin xyz="0.0362 -0.0156 -0.013" rpy="-1.5708 0 0"/>
+            <material name="green"/>    
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0181 0.0022 0.02"/>
+            </geometry>
+            <origin xyz="0.02715 -0.0156 -0.013" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <collision>
+            <!-- approximated as a box, note this means overlaps to other links -->
+            <geometry>
+                <box size="0.0562 0.0334 0.0334"/>
+            </geometry>
+            <origin xyz="0.0181 0 -0.013" rpy="0 0 0"/>
+        </collision>
+
+        <inertial>
+            <mass value="0.0439"/>
+            <origin xyz="0.0181 0 -0.013" rpy="0 0 0"/>
+            <inertia ixx="8.2e-6" ixy="0" ixz="0" iyy="1.6e-5" iyz="0" izz="1.6e-5"/>
+        </inertial>
+    </link>
+
+    <!-- rear doubleU ///////////////////////////////////////// -->
+    <joint name="rear_body_motor_rear_doubleu_joint" type="revolute">
+        <parent link="rear_body_motor_link"/>
+        <child link="rear_doubleu_link"/>
+        <origin xyz="-0.0075 0 0.013" rpy="0 0 0"/>
+        <axis xyz="0 0 -1"/>
+        <limit lower="-1.5708" upper="1.5708" velocity="10.0" effort="10.0"/> 
+    </joint>
+
+    <!-- doubleu link is 0.0562 x 0.0334 x 0.0334 overall -->
+    <link name="rear_doubleu_link">
+        <!-- horizontal components -->
+        <visual>
+            <geometry>
+                <cylinder radius="0.01" length="0.0022"/>
+            </geometry>
+            <origin xyz="0 0 0.0026" rpy="0 0 0"/>
+            <material name="green"/>    
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0181 0.02 0.0022"/>
+            </geometry>
+            <origin xyz="-0.00905 0 0.0026" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <cylinder radius="0.01" length="0.0022"/>
+            </geometry>
+            <origin xyz="0 0 -0.0286" rpy="0 0 0"/>
+            <material name="green"/>    
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0181 0.02 0.0022"/>
+            </geometry>
+            <origin xyz="-0.00905 0 -0.0286" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- central component -->
+        <visual>
+            <geometry>
+                <box size="0.0022 0.02 0.0334"/>
+            </geometry>
+            <origin xyz="-0.0181 0 -0.013" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0022 0.0334 0.02"/>
+            </geometry>
+            <origin xyz="-0.0181 0 -0.013" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- vertical  -->
+        <visual>
+            <geometry>
+                <cylinder radius="0.01" length="0.0022"/>
+            </geometry>
+            <origin xyz="-0.0362 0.0156 -0.013" rpy="1.5708 0 0"/>
+            <material name="green"/>    
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0181 0.0022 0.02"/>
+            </geometry>
+            <origin xyz="-0.02715 0.0156 -0.013" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <cylinder radius="0.01" length="0.0022"/>
+            </geometry>
+            <origin xyz="-0.0362 -0.0156 -0.013" rpy="-1.5708 0 0"/>
+            <material name="green"/>    
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0181 0.0022 0.02"/>
+            </geometry>
+            <origin xyz="-0.02715 -0.0156 -0.013" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <collision>
+            <!-- approximated as a box, note this means overlaps to other links -->
+            <geometry>
+                <box size="0.0562 0.0334 0.0334"/>
+            </geometry>
+            <origin xyz="-0.0181 0 -0.013" rpy="0 0 0"/>
+        </collision>
+
+        <inertial>
+            <mass value="0.0439"/>
+            <origin xyz="-0.0181 0 -0.013" rpy="0 0 0"/>
+            <inertia ixx="8.2e-6" ixy="0" ixz="0" iyy="1.6e-5" iyz="0" izz="1.6e-5"/>
+        </inertial>
+    </link>
+
+    <!-- left doubleU ///////////////////////////////////////// -->
+    <joint name="left_body_motor_left_doubleu_joint" type="revolute">
+        <parent link="left_body_motor_link"/>
+        <child link="left_doubleu_link"/>
+        <origin xyz="0 0.0075 0.013" rpy="0 0 0"/>
+        <axis xyz="0 0 -1"/>
+        <limit lower="-1.5708" upper="1.5708" velocity="10.0" effort="10.0"/> 
+    </joint>
+
+    <!-- doubleu link is 0.0562 x 0.0334 x 0.0334 overall -->
+    <link name="left_doubleu_link">
+        <!-- horizontal components -->
+        <visual>
+            <geometry>
+                <cylinder radius="0.01" length="0.0022"/>
+            </geometry>
+            <origin xyz="0 0 0.0026" rpy="0 0 0"/>
+            <material name="green"/>    
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.02 0.0181 0.0022"/>
+            </geometry>
+            <origin xyz="0 0.00905 0.0026" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <cylinder radius="0.01" length="0.0022"/>
+            </geometry>
+            <origin xyz="0 0 -0.0286" rpy="0 0 0"/>
+            <material name="green"/>    
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.02 0.0181 0.0022"/>
+            </geometry>
+            <origin xyz="0 0.00905 -0.0286" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- central component -->
+        <visual>
+            <geometry>
+                <box size="0.02 0.0022 0.0334"/>
+            </geometry>
+            <origin xyz="0 0.0181 -0.013" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0334 0.0022 0.02"/>
+            </geometry>
+            <origin xyz="0 0.0181 -0.013" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- vertical  -->
+        <visual>
+            <geometry>
+                <cylinder radius="0.01" length="0.0022"/>
+            </geometry>
+            <origin xyz="0.0156 0.0362 -0.013" rpy="0 1.5708 0"/>
+            <material name="green"/>    
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0022 0.0181 0.02"/>
+            </geometry>
+            <origin xyz="0.0156 0.02715 -0.013" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <cylinder radius="0.01" length="0.0022"/>
+            </geometry>
+            <origin xyz="-0.0156 0.0362 -0.013" rpy="0 -1.5708 0"/>
+            <material name="green"/>    
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0022 0.0181 0.02"/>
+            </geometry>
+            <origin xyz="-0.0156 0.02715 -0.013" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <collision>
+            <!-- approximated as a box, note this means overlaps to other links -->
+            <geometry>
+                <box size="0.0334 0.0562 0.0334"/>
+            </geometry>
+            <origin xyz="0 0.0181 -0.013" rpy="0 0 0"/>
+        </collision>
+
+        <inertial>
+            <mass value="0.0439"/>
+            <origin xyz="0 0.0181 -0.013" rpy="0 0 0"/>
+            <inertia ixx="1.6e-5" ixy="0" ixz="0" iyy="8.2e-6" iyz="0" izz="1.6e-5"/>
+        </inertial>
+    </link>
+
+    <!-- right doubleU ///////////////////////////////////////// -->
+    <joint name="right_body_motor_right_doubleu_joint" type="revolute">
+        <parent link="right_body_motor_link"/>
+        <child link="right_doubleu_link"/>
+        <origin xyz="0 -0.0075 0.013" rpy="0 0 0"/>
+        <axis xyz="0 0 -1"/>
+        <limit lower="-1.5708" upper="1.5708" velocity="10.0" effort="10.0"/> 
+    </joint>
+
+    <!-- doubleu link is 0.0562 x 0.0334 x 0.0334 overall -->
+    <link name="right_doubleu_link">
+        <!-- horizontal components -->
+        <visual>
+            <geometry>
+                <cylinder radius="0.01" length="0.0022"/>
+            </geometry>
+            <origin xyz="0 0 0.0026" rpy="0 0 0"/>
+            <material name="green"/>    
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.02 0.0181 0.0022"/>
+            </geometry>
+            <origin xyz="0 -0.00905 0.0026" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <cylinder radius="0.01" length="0.0022"/>
+            </geometry>
+            <origin xyz="0 0 -0.0286" rpy="0 0 0"/>
+            <material name="green"/>    
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.02 0.0181 0.0022"/>
+            </geometry>
+            <origin xyz="0 -0.00905 -0.0286" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- central component -->
+        <visual>
+            <geometry>
+                <box size="0.02 0.0022 0.0334"/>
+            </geometry>
+            <origin xyz="0 -0.0181 -0.013" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0334 0.0022 0.02"/>
+            </geometry>
+            <origin xyz="0 -0.0181 -0.013" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- vertical  -->
+        <visual>
+            <geometry>
+                <cylinder radius="0.01" length="0.0022"/>
+            </geometry>
+            <origin xyz="0.0156 -0.0362 -0.013" rpy="0 1.5708 0"/>
+            <material name="green"/>    
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0022 0.0181 0.02"/>
+            </geometry>
+            <origin xyz="0.0156 -0.02715 -0.013" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <cylinder radius="0.01" length="0.0022"/>
+            </geometry>
+            <origin xyz="-0.0156 -0.0362 -0.013" rpy="0 -1.5708 0"/>
+            <material name="green"/>    
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0022 0.0181 0.02"/>
+            </geometry>
+            <origin xyz="-0.0156 -0.02715 -0.013" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <collision>
+            <!-- approximated as a box, note this means overlaps to other links -->
+            <geometry>
+                <box size="0.0334 0.0562 0.0334"/>
+            </geometry>
+            <origin xyz="0 -0.0181 -0.013" rpy="0 0 0"/>
+        </collision>
+
+        <inertial>
+            <mass value="0.0439"/>
+            <origin xyz="0 -0.0181 -0.013" rpy="0 0 0"/>
+            <inertia ixx="1.6e-5" ixy="0" ixz="0" iyy="8.2e-6" iyz="0" izz="1.6e-5"/>
+        </inertial>
+    </link>
+
+
+    <!-- thigh motors ////////////////////////////////////////////////////////////////////////////////// -->
+    <!-- centre of joint rotation is set to be horizontally centre of the outer most rounded end part of the 
+         doubleu on the clockwise side when viewed from above,
+         the rest of the link is offset from there -->
+    <joint name="front_doubleu_front_thigh_motor_joint" type="revolute">
+        <parent link="front_doubleu_link"/>
+        <child link="front_thigh_motor_link"/>
+        <origin xyz="0.0362 -0.0156 -0.013" rpy="0 0 0"/>
+        <axis xyz="0 1 0"/>
+        <limit lower="-1.9199" upper="1.9199" velocity="10.0" effort="10.0"/> 
+    </joint>
+
+    <link name="front_thigh_motor_link">
+        <visual>
+            <geometry>
+                <box size="0.034 0.023 0.02"/>
+            </geometry>
+            <origin xyz="0.0075 0.0156 0" rpy="0 0 0"/>
+            <material name="black"/>
+        </visual>
+
+        <collision>
+            <geometry>
+                <box size="0.034 0.023 0.02"/>
+            </geometry>
+            <origin xyz="0.0075 0.0156 0" rpy="0 0 0"/>
+        </collision>
+
+        <inertial>
+            <!-- mass includes all parts listed under XL330 motor including horn spacer and screws as specified in fusion assembly -->
+            <mass value="0.12454"/>
+            <origin xyz="0.0075 0.0156 0" rpy="0 0 0"/>
+            <inertia ixx="9.6e-6" ixy="0" ixz="0" iyy="1.6e-5" iyz="0" izz="1.7e-5"/>
+        </inertial>
+    </link>
+
+    <joint name="rear_doubleu_rear_thigh_motor_joint" type="revolute">
+        <parent link="rear_doubleu_link"/>
+        <child link="rear_thigh_motor_link"/>
+        <origin xyz="-0.0362 -0.0156 -0.013" rpy="0 0 0"/>
+        <axis xyz="0 -1 0"/>
+        <limit lower="-1.9199" upper="1.9199" velocity="10.0" effort="10.0"/> 
+    </joint>
+
+    <link name="rear_thigh_motor_link">
+        <visual>
+            <geometry>
+                <box size="0.034 0.023 0.02"/>
+            </geometry>
+            <origin xyz="-0.0075 0.0156 0" rpy="0 0 0"/>
+            <material name="black"/>
+        </visual>
+
+        <collision>
+            <geometry>
+                <box size="0.034 0.023 0.02"/>
+            </geometry>
+            <origin xyz="-0.0075 0.0156 0" rpy="0 0 0"/>
+        </collision>
+
+        <inertial>
+            <!-- mass includes all parts listed under XL330 motor including horn spacer and screws as specified in fusion assembly -->
+            <mass value="0.12454"/>
+            <origin xyz="-0.0075 0.0156 0" rpy="0 0 0"/>
+            <inertia ixx="9.6e-6" ixy="0" ixz="0" iyy="1.6e-5" iyz="0" izz="1.7e-5"/>
+        </inertial>
+    </link>
+
+    <joint name="left_doubleu_left_thigh_motor_joint" type="revolute">
+        <parent link="left_doubleu_link"/>
+        <child link="left_thigh_motor_link"/>
+        <origin xyz="-0.0156 0.0362 -0.013" rpy="0 0 0"/>
+        <axis xyz="-1 0 0"/>
+        <limit lower="-1.9199" upper="1.9199" velocity="10.0" effort="10.0"/> 
+    </joint>
+
+    <link name="left_thigh_motor_link">
+        <visual>
+            <geometry>
+                <box size="0.023 0.034 0.02"/>
+            </geometry>
+            <origin xyz="0.0156 0.0075 0" rpy="0 0 0"/>
+            <material name="black"/>
+        </visual>
+
+        <collision>
+            <geometry>
+                <box size="0.023 0.034 0.02"/>
+            </geometry>
+            <origin xyz="0.0156 0.0075 0" rpy="0 0 0"/>
+        </collision>
+
+        <inertial>
+            <!-- mass includes all parts listed under XL330 motor including horn spacer and screws as specified in fusion assembly -->
+            <mass value="0.12454"/>
+            <origin xyz="0.0156 0.0075 0" rpy="0 0 0"/>
+            <inertia ixx="1.6e-5" ixy="0" ixz="0" iyy="9.6e-6" iyz="0" izz="1.7e-5"/>
+        </inertial>
+    </link>
+
+    <joint name="right_doubleu_right_thigh_motor_joint" type="revolute">
+        <parent link="right_doubleu_link"/>
+        <child link="right_thigh_motor_link"/>
+        <origin xyz="-0.0156 -0.0362 -0.013" rpy="0 0 0"/>
+        <axis xyz="1 0 0"/>
+        <limit lower="-1.9199" upper="1.9199" velocity="10.0" effort="10.0"/> 
+    </joint>
+
+    <link name="right_thigh_motor_link">
+        <visual>
+            <geometry>
+                <box size="0.023 0.034 0.02"/>
+            </geometry>
+            <origin xyz="0.0156 -0.0075 0" rpy="0 0 0"/>
+            <material name="black"/>
+        </visual>
+
+        <collision>
+            <geometry>
+                <box size="0.023 0.034 0.02"/>
+            </geometry>
+            <origin xyz="0.0156 -0.0075 0" rpy="0 0 0"/>
+        </collision>
+
+        <inertial>
+            <!-- mass includes all parts listed under XL330 motor including horn spacer and screws as specified in fusion assembly -->
+            <mass value="0.12454"/>
+            <origin xyz="0.0156 -0.0075 0" rpy="0 0 0"/>
+            <inertia ixx="1.6e-5" ixy="0" ixz="0" iyy="9.6e-6" iyz="0" izz="1.7e-5"/>
+        </inertial>
+    </link>
+
+
+    <!-- sides ////////////////////////////////////////////////////////////////////////////////// -->
+    <!-- joint origin is set for centre of side in direction towards leg, and centre of motor in cw/ccw directions when viewed from above
+         (note motor links are around rotation centre, so motor body centres are offset) -->
+    <joint name="front_thigh_motor_front_side_joint" type="fixed">
+        <parent link="front_thigh_motor_link"/>
+        <child link="front_side_link"/>
+        <origin xyz="0.0255 0.0156 0" rpy="0 0 0"/>
+    </joint>
+
+    <link name="front_side_link">
+        <visual>
+            <geometry>
+                <box size="0.072 0.0022 0.02"/>
+            </geometry>
+            <origin xyz="0 0.0126 0" rpy="0 0 0"/>
+            <material name="blue"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.072 0.0022 0.02"/>
+            </geometry>
+            <origin xyz="0 -0.0126 0" rpy="0 0 0"/>
+            <material name="blue"/>
+        </visual>
+
+        <collision>
+            <!-- both sides approximated as a single box -->
+            <geometry>
+                <box size="0.072 0.0274 0.02"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </collision>
+
+        <inertial>
+            <mass value="0.0372"/>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <inertia ixx="3.6e-6" ixy="0" ixz="0" iyy="1.7e-5" iyz="0" izz="1.8e-5"/>
+        </inertial>
+    </link>
+
+    <joint name="rear_thigh_motor_rear_side_joint" type="fixed">
+        <parent link="rear_thigh_motor_link"/>
+        <child link="rear_side_link"/>
+        <origin xyz="-0.0255 0.0156 0" rpy="0 0 0"/>
+    </joint>
+
+    <link name="rear_side_link">
+        <visual>
+            <geometry>
+                <box size="0.072 0.0022 0.02"/>
+            </geometry>
+            <origin xyz="0 0.0126 0" rpy="0 0 0"/>
+            <material name="blue"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.072 0.0022 0.02"/>
+            </geometry>
+            <origin xyz="0 -0.0126 0" rpy="0 0 0"/>
+            <material name="blue"/>
+        </visual>
+
+        <collision>
+            <!-- both sides approximated as a single box -->
+            <geometry>
+                <box size="0.072 0.0274 0.02"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </collision>
+
+        <inertial>
+            <mass value="0.0372"/>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <inertia ixx="3.6e-6" ixy="0" ixz="0" iyy="1.7e-5" iyz="0" izz="1.8e-5"/>
+        </inertial>
+    </link>
+
+    <joint name="left_thigh_motor_left_side_joint" type="fixed">
+        <parent link="left_thigh_motor_link"/>
+        <child link="left_side_link"/>
+        <origin xyz="0.0156 0.0255 0" rpy="0 0 0"/>
+    </joint>
+
+    <link name="left_side_link">
+        <visual>
+            <geometry>
+                <box size="0.0022 0.072 0.02"/>
+            </geometry>
+            <origin xyz="0.0126 0 0" rpy="0 0 0"/>
+            <material name="blue"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0022 0.072 0.02"/>
+            </geometry>
+            <origin xyz="-0.0126 0 0" rpy="0 0 0"/>
+            <material name="blue"/>
+        </visual>
+
+        <collision>
+            <!-- both sides approximated as a single box -->
+            <geometry>
+                <box size="0.0274 0.072 0.02"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </collision>
+
+        <inertial>
+            <mass value="0.0372"/>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <inertia ixx="1.7e-5" ixy="0" ixz="0" iyy="3.6e-6" iyz="0" izz="1.8e-5"/>
+        </inertial>
+    </link>
+
+    <joint name="right_thigh_motor_right_side_joint" type="fixed">
+        <parent link="right_thigh_motor_link"/>
+        <child link="right_side_link"/>
+        <origin xyz="0.0156 -0.0255 0" rpy="0 0 0"/>
+    </joint>
+
+    <link name="right_side_link">
+        <visual>
+            <geometry>
+                <box size="0.0022 0.072 0.02"/>
+            </geometry>
+            <origin xyz="0.0126 0 0" rpy="0 0 0"/>
+            <material name="blue"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0022 0.072 0.02"/>
+            </geometry>
+            <origin xyz="-0.0126 0 0" rpy="0 0 0"/>
+            <material name="blue"/>
+        </visual>
+
+        <collision>
+            <!-- both sides approximated as a single box -->
+            <geometry>
+                <box size="0.0274 0.072 0.02"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </collision>
+
+        <inertial>
+            <mass value="0.0372"/>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <inertia ixx="1.7e-5" ixy="0" ixz="0" iyy="3.6e-6" iyz="0" izz="1.8e-5"/>
+        </inertial>
+    </link>
+
+
+    <!-- leg motors ////////////////////////////////////////////////////////////////////////////////// -->
+    <!-- see motor_leg joints for rotation -->
+    <joint name="front_side_front_leg_motor_joint" type="fixed">
+        <parent link="front_side_link"/>
+        <child link="front_leg_motor_link"/>
+        <origin xyz="0.018 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <link name="front_leg_motor_link">
+        <visual>
+            <geometry>
+                <box size="0.034 0.023 0.02"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <material name="black"/>
+        </visual>
+
+        <collision>
+            <geometry>
+                <box size="0.034 0.023 0.02"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </collision>
+
+        <inertial>
+            <!-- mass includes all parts listed under XL330 motor including horn spacer and screws as specified in fusion assembly -->
+            <mass value="0.12454"/>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <inertia ixx="9.6e-6" ixy="0" ixz="0" iyy="1.6e-5" iyz="0" izz="1.7e-5"/>
+        </inertial>
+    </link>
+
+    <joint name="rear_side_rear_leg_motor_joint" type="fixed">
+        <parent link="rear_side_link"/>
+        <child link="rear_leg_motor_link"/>
+        <origin xyz="-0.018 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <link name="rear_leg_motor_link">
+        <visual>
+            <geometry>
+                <box size="0.034 0.023 0.02"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <material name="black"/>
+        </visual>
+
+        <collision>
+            <geometry>
+                <box size="0.034 0.023 0.02"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </collision>
+
+        <inertial>
+            <!-- mass includes all parts listed under XL330 motor including horn spacer and screws as specified in fusion assembly -->
+            <mass value="0.12454"/>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <inertia ixx="9.6e-6" ixy="0" ixz="0" iyy="1.6e-5" iyz="0" izz="1.7e-5"/>
+        </inertial>
+    </link>
+
+    <joint name="left_side_left_leg_motor_joint" type="fixed">
+        <parent link="left_side_link"/>
+        <child link="left_leg_motor_link"/>
+        <origin xyz="0 0.018 0" rpy="0 0 0"/>
+    </joint>
+
+    <link name="left_leg_motor_link">
+        <visual>
+            <geometry>
+                <box size="0.023 0.034 0.02"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <material name="black"/>
+        </visual>
+
+        <collision>
+            <geometry>
+                <box size="0.023 0.034 0.02"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </collision>
+
+        <inertial>
+            <!-- mass includes all parts listed under XL330 motor including horn spacer and screws as specified in fusion assembly -->
+            <mass value="0.12454"/>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <inertia ixx="1.6e-5" ixy="0" ixz="0" iyy="9.6e-6" iyz="0" izz="1.7e-5"/>
+        </inertial>
+    </link>
+
+    <joint name="right_side_right_leg_motor_joint" type="fixed">
+        <parent link="right_side_link"/>
+        <child link="right_leg_motor_link"/>
+        <origin xyz="0 -0.018 0" rpy="0 0 0"/>
+    </joint>
+
+    <link name="right_leg_motor_link">
+        <visual>
+            <geometry>
+                <box size="0.023 0.034 0.02"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <material name="black"/>
+        </visual>
+
+        <collision>
+            <geometry>
+                <box size="0.023 0.034 0.02"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </collision>
+
+        <inertial>
+            <!-- mass includes all parts listed under XL330 motor including horn spacer and screws as specified in fusion assembly -->
+            <mass value="0.12454"/>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <inertia ixx="1.6e-5" ixy="0" ixz="0" iyy="9.6e-6" iyz="0" izz="1.7e-5"/>
+        </inertial>
+    </link>
+
+
+
+    <!-- legs ////////////////////////////////////////////////////////////////////////////////// -->
+    <!-- centre of joint rotation is set to be centre of the clockwise side_link horizontally when viewed from above and inline with the motor drive,
+         the rest of the link is offset from there -->
+    <!-- front leg ///////////////////////////////////////// -->
+    <joint name="front_leg_motor_front_leg_joint" type="revolute">
+        <parent link="front_leg_motor_link"/>
+        <child link="front_leg_link"/>
+        <origin xyz="0.0075 -0.0126 0" rpy="0 0 0"/>
+        <axis xyz="0 1 0"/>
+        <limit lower="-4.18879" upper="1.0472" velocity="10.0" effort="10.0"/> 
+    </joint>
+
+    <link name="front_leg_link">
+        <!-- top straight pieces -->
+        <visual>
+            <geometry>
+                <box size="0.01 0.0022 0.0242"/>
+            </geometry>
+            <origin xyz="0 -0.003 0.0219" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.01 0.0022 0.0242"/>
+            </geometry>
+            <origin xyz="0 0.0282 0.0219" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- top diagonals -->
+        <visual>
+            <geometry>
+                <box size="0.005 0.0022 0.0247"/>
+            </geometry>
+            <origin xyz="-0.0052 -0.003 0.0214" rpy="0 0.1923 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.005 0.0022 0.0247"/>
+            </geometry>
+            <origin xyz="0.0052 -0.003 0.0214" rpy="0 -0.1923 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.005 0.0022 0.0247"/>
+            </geometry>
+            <origin xyz="-0.0052 0.0282 0.0214" rpy="0 0.1923 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.005 0.0022 0.0247"/>
+            </geometry>
+            <origin xyz="0.0052 0.0282 0.0214" rpy="0 -0.1923 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- centre side pieces -->
+        <visual>
+            <geometry>
+                <box size="0.02 0.0022 0.081"/>
+            </geometry>
+            <origin xyz="0 -0.003 -0.0307" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.02 0.0022 0.081"/>
+            </geometry>
+            <origin xyz="0 0.0282 -0.0307" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- cross beams (upper and lower) -->
+        <visual>
+            <geometry>
+                <box size="0.02 0.0334 0.0022"/>
+            </geometry>
+            <origin xyz="0 0.0126 -0.0438" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.02 0.0334 0.0049"/>
+            </geometry>
+            <origin xyz="0 0.0126 -0.0663" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- lower side pieces -->
+        <visual>
+            <geometry>
+                <box size="0.02 0.0025 0.0139"/>
+            </geometry>
+            <origin xyz="0 -0.00535 -0.06325" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.02 0.0025 0.0139"/>
+            </geometry>
+            <origin xyz="0 0.03055 -0.06325" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- bottom diagonals -->
+        <visual>
+            <geometry>
+                <box size="0.02 0.0022 0.0207"/>
+            </geometry>
+            <origin xyz="0 0.00127 -0.0767" rpy="0.76 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.02 0.0022 0.0207"/>
+            </geometry>
+            <origin xyz="0 0.02393 -0.0767" rpy="-0.76 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- bottom horizontal -->
+        <visual>
+            <geometry>
+                <box size="0.02 0.0099 0.0022"/>
+            </geometry>
+            <origin xyz="0 0.0126 -0.0839" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+
+        <collision>
+            <geometry>
+                <box size="0.02 0.0334 0.1052"/>
+            </geometry>
+            <origin xyz="0 0.0126 -0.0186" rpy="0 0 0"/>
+        </collision>
+
+        <!-- full leg as single block (which is what inertial tag is based on) - leaves feet squared off 
+             left here for demo -->
+        <!-- <collision>
+            <geometry>
+                <box size="0.02 0.0334 0.119"/>
+            </geometry>
+            <origin xyz="0 0.0126 -0.0255" rpy="0 0 0"/>
+        </collision> -->
+
+        <inertial>
+            <!-- calculated based on full leg (including dummies) -->
+            <mass value="0.13034"/>
+            <origin xyz="0 0.0126 -0.0255" rpy="0 0 0"/>
+            <inertia ixx="1.7e-4" ixy="0" ixz="0" iyy="1.6e-4" iyz="0" izz="1.6e-5"/>
+        </inertial>
+    </link>
+
+    <joint name="front_leg_front_dummy_leg_mid_horiz_joint" type="fixed">
+        <parent link="front_leg_link"/>
+        <child link="front_dummy_leg_mid_horiz_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <link name="front_dummy_leg_mid_horiz_link">
+        <visual>
+            <geometry>
+               <box size="0 0 0"/>
+            </geometry>
+            <material name="green" />
+        </visual>
+
+        <collision>
+            <geometry>
+                <box size="0.02 0.03715 0.0139"/>
+            </geometry>
+            <origin xyz="0 0.0126 -0.06325" rpy="0 0 0"/>
+        </collision>
+    </link>
+
+    <joint name="front_leg_front_dummy_leg_diag1_joint" type="fixed">
+        <parent link="front_leg_link"/>
+        <child link="front_dummy_leg_diag1_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <link name="front_dummy_leg_diag1_link">
+        <visual>
+            <geometry>
+                <box size="0 0 0"/>
+            </geometry>
+            <material name="green"/>
+        </visual>
+        
+        <collision>
+            <geometry>
+                <box size="0.02 0.0022 0.0207"/>
+            </geometry>
+            <origin xyz="0 0.00127 -0.0767" rpy="0.76 0 0"/>
+        </collision>
+    </link>
+
+    <joint name="front_leg_front_dummy_leg_diag2_joint" type="fixed">
+        <parent link="front_leg_link"/>
+        <child link="front_dummy_leg_diag2_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <link name="front_dummy_leg_diag2_link">
+        <visual>
+            <geometry>
+                <box size="0 0 0"/>
+            </geometry>
+            <material name="green"/>
+        </visual>
+        
+        <collision>
+            <geometry>
+                <box size="0.02 0.0022 0.0207"/>
+            </geometry>
+            <origin xyz="0 0.02393 -0.0767" rpy="-0.76 0 0"/>
+        </collision>
+    </link>
+
+    <joint name="front_leg_front_dummy_low_horiz_joint" type="fixed">
+        <parent link="front_leg_link"/>
+        <child link="front_dummy_leg_low_horiz_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <link name="front_dummy_leg_low_horiz_link">
+        <visual>
+            <geometry>
+                <box size="0 0 0"/>
+            </geometry>
+            <material name="green"/>
+        </visual>
+        
+        <collision>
+            <geometry>
+                <box size="0.02 0.0099 0.0022"/>
+            </geometry>
+            <origin xyz="0 0.0126 -0.0839" rpy="0 0 0"/>
+        </collision>
+    </link>
+
+
+    <!-- rear leg ///////////////////////////////////////// -->
+    <joint name="rear_leg_motor_rear_leg_joint" type="revolute">
+        <parent link="rear_leg_motor_link"/>
+        <child link="rear_leg_link"/>
+        <origin xyz="-0.0075 -0.0126 0" rpy="0 0 0"/>
+        <axis xyz="0 -1 0"/>
+        <limit lower="-4.18879" upper="1.0472" velocity="10.0" effort="10.0"/> 
+    </joint>
+
+    <link name="rear_leg_link">
+        <!-- top straight pieces -->
+        <visual>
+            <geometry>
+                <box size="0.01 0.0022 0.0242"/>
+            </geometry>
+            <origin xyz="0 -0.003 0.0219" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.01 0.0022 0.0242"/>
+            </geometry>
+            <origin xyz="0 0.0282 0.0219" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- top diagonals -->
+        <visual>
+            <geometry>
+                <box size="0.005 0.0022 0.0247"/>
+            </geometry>
+            <origin xyz="0.0052 -0.003 0.0214" rpy="0 -0.1923 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.005 0.0022 0.0247"/>
+            </geometry>
+            <origin xyz="-0.0052 -0.003 0.0214" rpy="0 0.1923 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.005 0.0022 0.0247"/>
+            </geometry>
+            <origin xyz="0.0052 0.0282 0.0214" rpy="0 -0.1923 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.005 0.0022 0.0247"/>
+            </geometry>
+            <origin xyz="-0.0052 0.0282 0.0214" rpy="0 0.1923 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- centre side pieces -->
+        <visual>
+            <geometry>
+                <box size="0.02 0.0022 0.081"/>
+            </geometry>
+            <origin xyz="0 -0.003 -0.0307" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.02 0.0022 0.081"/>
+            </geometry>
+            <origin xyz="0 0.0282 -0.0307" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- cross beams (upper and lower) -->
+        <visual>
+            <geometry>
+                <box size="0.02 0.0334 0.0022"/>
+            </geometry>
+            <origin xyz="0 0.0126 -0.0438" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.02 0.0334 0.0049"/>
+            </geometry>
+            <origin xyz="0 0.0126 -0.0663" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- lower side pieces -->
+        <visual>
+            <geometry>
+                <box size="0.02 0.0025 0.0139"/>
+            </geometry>
+            <origin xyz="0 -0.00535 -0.06325" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.02 0.0025 0.0139"/>
+            </geometry>
+            <origin xyz="0 0.03055 -0.06325" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- bottom diagonals -->
+        <visual>
+            <geometry>
+                <box size="0.02 0.0022 0.0207"/>
+            </geometry>
+            <origin xyz="0 0.00127 -0.0767" rpy="0.76 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.02 0.0022 0.0207"/>
+            </geometry>
+            <origin xyz="0 0.02393 -0.0767" rpy="-0.76 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- bottom horizontal -->
+        <visual>
+            <geometry>
+                <box size="0.02 0.0099 0.0022"/>
+            </geometry>
+            <origin xyz="0 0.0126 -0.0839" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+
+        <collision>
+            <geometry>
+                <box size="0.02 0.0334 0.1052"/>
+            </geometry>
+            <origin xyz="0 0.0126 -0.0186" rpy="0 0 0"/>
+        </collision>
+
+        <!-- full leg as single block (which is what inertial tag is based on) - leaves feet squared off 
+             left here for demo -->
+        <!-- <collision>
+            <geometry>
+                <box size="0.02 0.0334 0.119"/>
+            </geometry>
+            <origin xyz="0 0.0126 -0.0255" rpy="0 0 0"/>
+        </collision> -->
+
+        <inertial>
+            <!-- calculated based on full leg (including dummies) -->
+            <mass value="0.13034"/>
+            <origin xyz="0 0.0126 -0.0255" rpy="0 0 0"/>
+            <inertia ixx="1.7e-4" ixy="0" ixz="0" iyy="1.6e-4" iyz="0" izz="1.6e-5"/>
+        </inertial>
+    </link>
+
+    <joint name="rear_leg_rear_dummy_leg_mid_horiz_joint" type="fixed">
+        <parent link="rear_leg_link"/>
+        <child link="rear_dummy_leg_mid_horiz_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <link name="rear_dummy_leg_mid_horiz_link">
+        <visual>
+            <geometry>
+               <box size="0 0 0"/>
+            </geometry>
+            <material name="green" />
+        </visual>
+
+        <collision>
+            <geometry>
+                <box size="0.02 0.03715 0.0139"/>
+            </geometry>
+            <origin xyz="0 0.0126 -0.06325" rpy="0 0 0"/>
+        </collision>
+    </link>
+
+    <joint name="rear_leg_rear_dummy_leg_diag1_joint" type="fixed">
+        <parent link="rear_leg_link"/>
+        <child link="rear_dummy_leg_diag1_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <link name="rear_dummy_leg_diag1_link">
+        <visual>
+            <geometry>
+                <box size="0 0 0"/>
+            </geometry>
+            <material name="green"/>
+        </visual>
+        
+        <collision>
+            <geometry>
+                <box size="0.02 0.0022 0.0207"/>
+            </geometry>
+            <origin xyz="0 0.00127 -0.0767" rpy="0.76 0 0"/>
+        </collision>
+    </link>
+
+    <joint name="rear_leg_rear_dummy_leg_diag2_joint" type="fixed">
+        <parent link="rear_leg_link"/>
+        <child link="rear_dummy_leg_diag2_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <link name="rear_dummy_leg_diag2_link">
+        <visual>
+            <geometry>
+                <box size="0 0 0"/>
+            </geometry>
+            <material name="green"/>
+        </visual>
+        
+        <collision>
+            <geometry>
+                <box size="0.02 0.0022 0.0207"/>
+            </geometry>
+            <origin xyz="0 0.02393 -0.0767" rpy="-0.76 0 0"/>
+        </collision>
+    </link>
+
+    <joint name="rear_leg_rear_dummy_low_horiz_joint" type="fixed">
+        <parent link="rear_leg_link"/>
+        <child link="rear_dummy_leg_low_horiz_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <link name="rear_dummy_leg_low_horiz_link">
+        <visual>
+            <geometry>
+                <box size="0 0 0"/>
+            </geometry>
+            <material name="green"/>
+        </visual>
+        
+        <collision>
+            <geometry>
+                <box size="0.02 0.0099 0.0022"/>
+            </geometry>
+            <origin xyz="0 0.0126 -0.0839" rpy="0 0 0"/>
+        </collision>
+    </link>
+
+
+    <!-- left leg ///////////////////////////////////////// -->
+    <joint name="left_leg_motor_left_leg_joint" type="revolute">
+        <parent link="left_leg_motor_link"/>
+        <child link="left_leg_link"/>
+        <origin xyz="-0.0126 0.0075 0" rpy="0 0 0"/>
+        <axis xyz="-1 0 0"/>
+        <limit lower="-4.18879" upper="1.0472" velocity="10.0" effort="10.0"/> 
+    </joint>
+
+    <link name="left_leg_link">
+        <!-- top straight pieces -->
+        <visual>
+            <geometry>
+                <box size="0.0022 0.01 0.0242"/>
+            </geometry>
+            <origin xyz="-0.003 0 0.0219" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0022 0.01 0.0242"/>
+            </geometry>
+            <origin xyz="0.0282 0 0.0219" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- top diagonals -->
+        <visual>
+            <geometry>
+                <box size="0.0022 0.005 0.0247"/>
+            </geometry>
+            <origin xyz="-0.003 -0.0052 0.0214" rpy="-0.1923 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0022 0.005 0.0247"/>
+            </geometry>
+            <origin xyz="-0.003 0.0052 0.0214" rpy="0.1923 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0022 0.005 0.0247"/>
+            </geometry>
+            <origin xyz="0.0282 -0.0052 0.0214" rpy="-0.1923 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0022 0.005 0.0247"/>
+            </geometry>
+            <origin xyz="0.0282 0.0052 0.0214" rpy="0.1923 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- centre side pieces -->
+        <visual>
+            <geometry>
+                <box size="0.0022 0.02 0.081"/>
+            </geometry>
+            <origin xyz="-0.003 0 -0.0307" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0022 0.02 0.081"/>
+            </geometry>
+            <origin xyz="0.0282 0 -0.0307" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- cross beams (upper and lower) -->
+        <visual>
+            <geometry>
+                <box size="0.0334 0.02 0.0022"/>
+            </geometry>
+            <origin xyz="0.0126 0 -0.0438" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0334 0.02 0.0049"/>
+            </geometry>
+            <origin xyz="0.0126 0 -0.0663" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- lower side pieces -->
+        <visual>
+            <geometry>
+                <box size="0.0025 0.02 0.0139"/>
+            </geometry>
+            <origin xyz="-0.00535 0 -0.06325" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0025 0.02 0.0139"/>
+            </geometry>
+            <origin xyz="0.03055 0 -0.06325" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- bottom diagonals -->
+        <visual>
+            <geometry>
+                <box size="0.0022 0.02 0.0207"/>
+            </geometry>
+            <origin xyz="0.00127 0 -0.0767" rpy="0 -0.76 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0022 0.02 0.0207"/>
+            </geometry>
+            <origin xyz="0.02393 0 -0.0767" rpy="0 0.76 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- bottom horizontal -->
+        <visual>
+            <geometry>
+                <box size="0.0099 0.02 0.0022"/>
+            </geometry>
+            <origin xyz="0.0126 0 -0.0839" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+
+        <collision>
+            <geometry>
+                <box size="0.0334 0.02 0.1052"/>
+            </geometry>
+            <origin xyz="0.0126 0 -0.0186" rpy="0 0 0"/>
+        </collision>
+
+        <!-- full leg as single block (which is what inertial tag is based on) - leaves feet squared off 
+             left here for demo -->
+        <!-- <collision>
+            <geometry>
+                <box size="0.0334 0.02 0.119"/>
+            </geometry>
+            <origin xyz="0.0126 0 -0.0255" rpy="0 0 0"/>
+        </collision> -->
+
+        <inertial>
+            <!-- calculated based on full leg (including dummies) -->
+            <mass value="0.13034"/>
+            <origin xyz="0 0.0126 -0.0255" rpy="0 0 0"/>
+            <inertia ixx="1.6e-4" ixy="0" ixz="0" iyy="1.7e-4" iyz="0" izz="1.6e-5"/>
+        </inertial>
+    </link>
+
+    <joint name="left_leg_left_dummy_leg_mid_horiz_joint" type="fixed">
+        <parent link="left_leg_link"/>
+        <child link="left_dummy_leg_mid_horiz_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <link name="left_dummy_leg_mid_horiz_link">
+        <visual>
+            <geometry>
+               <box size="0 0 0"/>
+            </geometry>
+            <material name="green" />
+        </visual>
+
+        <collision>
+            <geometry>
+                <box size="0.03715 0.02 0.0139"/>
+            </geometry>
+            <origin xyz="0.0126 0 -0.06325" rpy="0 0 0"/>
+        </collision>
+    </link>
+
+    <joint name="left_leg_left_dummy_leg_diag1_joint" type="fixed">
+        <parent link="left_leg_link"/>
+        <child link="left_dummy_leg_diag1_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <link name="left_dummy_leg_diag1_link">
+        <visual>
+            <geometry>
+                <box size="0 0 0"/>
+            </geometry>
+            <material name="green"/>
+        </visual>
+        
+        <collision>
+            <geometry>
+                <box size="0.0022 0.02 0.0207"/>
+            </geometry>
+            <origin xyz="0.00127 0 -0.0767" rpy="0 -0.76 0"/>
+        </collision>
+    </link>
+
+    <joint name="left_leg_left_dummy_leg_diag2_joint" type="fixed">
+        <parent link="left_leg_link"/>
+        <child link="left_dummy_leg_diag2_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <link name="left_dummy_leg_diag2_link">
+        <visual>
+            <geometry>
+                <box size="0 0 0"/>
+            </geometry>
+            <material name="green"/>
+        </visual>
+        
+        <collision>
+            <geometry>
+                <box size="0.0022 0.02 0.0207"/>
+            </geometry>
+            <origin xyz="0.02393 0 -0.0767" rpy="0 0.76 0"/>
+        </collision>
+    </link>
+
+    <joint name="left_leg_left_dummy_low_horiz_joint" type="fixed">
+        <parent link="left_leg_link"/>
+        <child link="left_dummy_leg_low_horiz_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <link name="left_dummy_leg_low_horiz_link">
+        <visual>
+            <geometry>
+                <box size="0 0 0"/>
+            </geometry>
+            <material name="green"/>
+        </visual>
+        
+        <collision>
+            <geometry>
+                <box size="0.0099 0.02 0.0022"/>
+            </geometry>
+            <origin xyz="0.0126 0 -0.0839" rpy="0 0 0"/>
+        </collision>
+    </link>
+
+
+    <!-- right leg ///////////////////////////////////////// -->
+    <joint name="right_leg_motor_right_leg_joint" type="revolute">
+        <parent link="right_leg_motor_link"/>
+        <child link="right_leg_link"/>
+        <origin xyz="-0.0126 -0.0075 0" rpy="0 0 0"/>
+        <axis xyz="1 0 0"/>
+        <limit lower="-4.18879" upper="1.0472" velocity="10.0" effort="10.0"/> 
+    </joint>
+
+    <link name="right_leg_link">
+        <!-- top straight pieces -->
+        <visual>
+            <geometry>
+                <box size="0.0022 0.01 0.0242"/>
+            </geometry>
+            <origin xyz="-0.003 0 0.0219" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0022 0.01 0.0242"/>
+            </geometry>
+            <origin xyz="0.0282 0 0.0219" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- top diagonals -->
+        <visual>
+            <geometry>
+                <box size="0.0022 0.005 0.0247"/>
+            </geometry>
+            <origin xyz="-0.003 0.0052 0.0214" rpy="0.1923 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0022 0.005 0.0247"/>
+            </geometry>
+            <origin xyz="-0.003 -0.0052 0.0214" rpy="-0.1923 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0022 0.005 0.0247"/>
+            </geometry>
+            <origin xyz="0.0282 0.0052 0.0214" rpy="0.1923 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0022 0.005 0.0247"/>
+            </geometry>
+            <origin xyz="0.0282 -0.0052 0.0214" rpy="-0.1923 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- centre side pieces -->
+        <visual>
+            <geometry>
+                <box size="0.0022 0.02 0.081"/>
+            </geometry>
+            <origin xyz="-0.003 0 -0.0307" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0022 0.02 0.081"/>
+            </geometry>
+            <origin xyz="0.0282 0 -0.0307" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- cross beams (upper and lower) -->
+        <visual>
+            <geometry>
+                <box size="0.0334 0.02 0.0022"/>
+            </geometry>
+            <origin xyz="0.0126 0 -0.0438" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0334 0.02 0.0049"/>
+            </geometry>
+            <origin xyz="0.0126 0 -0.0663" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- lower side pieces -->
+        <visual>
+            <geometry>
+                <box size="0.0025 0.02 0.0139"/>
+            </geometry>
+            <origin xyz="-0.00535 0 -0.06325" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0025 0.02 0.0139"/>
+            </geometry>
+            <origin xyz="0.03055 0 -0.06325" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- bottom diagonals -->
+        <visual>
+            <geometry>
+                <box size="0.0022 0.02 0.0207"/>
+            </geometry>
+            <origin xyz="0.00127 0 -0.0767" rpy="0 -0.76 0"/>
+            <material name="green"/>
+        </visual>
+        <visual>
+            <geometry>
+                <box size="0.0022 0.02 0.0207"/>
+            </geometry>
+            <origin xyz="0.02393 0 -0.0767" rpy="0 0.76 0"/>
+            <material name="green"/>
+        </visual>
+
+        <!-- bottom horizontal -->
+        <visual>
+            <geometry>
+                <box size="0.0099 0.02 0.0022"/>
+            </geometry>
+            <origin xyz="0.0126 0 -0.0839" rpy="0 0 0"/>
+            <material name="green"/>
+        </visual>
+
+
+        <collision>
+            <geometry>
+                <box size="0.0334 0.02 0.1052"/>
+            </geometry>
+            <origin xyz="0.0126 0 -0.0186" rpy="0 0 0"/>
+        </collision>
+
+        <!-- full leg as single block (which is what inertial tag is based on) - leaves feet squared off 
+             left here for demo -->
+        <!-- <collision>
+            <geometry>
+                <box size="0.0334 0.02 0.119"/>
+            </geometry>
+            <origin xyz="0.0126 0 -0.0255" rpy="0 0 0"/>
+        </collision> -->
+
+        <inertial>
+            <!-- calculated based on full leg (including dummies) -->
+            <mass value="0.13034"/>
+            <origin xyz="0 0.0126 -0.0255" rpy="0 0 0"/>
+            <inertia ixx="1.6e-4" ixy="0" ixz="0" iyy="1.7e-4" iyz="0" izz="1.6e-5"/>
+        </inertial>
+    </link>
+
+    <joint name="right_leg_right_dummy_leg_mid_horiz_joint" type="fixed">
+        <parent link="right_leg_link"/>
+        <child link="right_dummy_leg_mid_horiz_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <link name="right_dummy_leg_mid_horiz_link">
+        <visual>
+            <geometry>
+               <box size="0 0 0"/>
+            </geometry>
+            <material name="green" />
+        </visual>
+
+        <collision>
+            <geometry>
+                <box size="0.03715 0.02 0.0139"/>
+            </geometry>
+            <origin xyz="0.0126 0 -0.06325" rpy="0 0 0"/>
+        </collision>
+    </link>
+
+    <joint name="right_leg_right_dummy_leg_diag1_joint" type="fixed">
+        <parent link="right_leg_link"/>
+        <child link="right_dummy_leg_diag1_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <link name="right_dummy_leg_diag1_link">
+        <visual>
+            <geometry>
+                <box size="0 0 0"/>
+            </geometry>
+            <material name="green"/>
+        </visual>
+        
+        <collision>
+            <geometry>
+                <box size="0.0022 0.02 0.0207"/>
+            </geometry>
+            <origin xyz="0.00127 0 -0.0767" rpy="0 -0.76 0"/>
+        </collision>
+    </link>
+
+    <joint name="right_leg_right_dummy_leg_diag2_joint" type="fixed">
+        <parent link="right_leg_link"/>
+        <child link="right_dummy_leg_diag2_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <link name="right_dummy_leg_diag2_link">
+        <visual>
+            <geometry>
+                <box size="0 0 0"/>
+            </geometry>
+            <material name="green"/>
+        </visual>
+        
+        <collision>
+            <geometry>
+                <box size="0.0022 0.02 0.0207"/>
+            </geometry>
+            <origin xyz="0.02393 0 -0.0767" rpy="0 0.76 0"/>
+        </collision>
+    </link>
+
+    <joint name="right_leg_right_dummy_low_horiz_joint" type="fixed">
+        <parent link="right_leg_link"/>
+        <child link="right_dummy_leg_low_horiz_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <link name="right_dummy_leg_low_horiz_link">
+        <visual>
+            <geometry>
+                <box size="0 0 0"/>
+            </geometry>
+            <material name="green"/>
+        </visual>
+        
+        <collision>
+            <geometry>
+                <box size="0.0099 0.02 0.0022"/>
+            </geometry>
+            <origin xyz="0.0126 0 -0.0839" rpy="0 0 0"/>
+        </collision>
+    </link>
+</robot>
